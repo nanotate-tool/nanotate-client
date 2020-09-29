@@ -43,7 +43,6 @@ export class BioAnnotationListComponent implements OnInit {
   contextWithSelector(selector: any) {
     if (this.context) {
       const text = this.context.substring(selector.from - 1, selector.to);
-      console.log(text, selector)
       return this.context.replace(text, `<span class="text-highlight">${text}</span>`);
     }
     return "unknow";

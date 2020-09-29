@@ -128,7 +128,6 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
         this.bioAnnotations = annotations;
         this.selectedBioAnnotations = _new ? this.bioAnnotations : this.bioAnnotations.
           filter(annotation => !this.settings.bio_annotations || this.settings.bio_annotations.includes(annotation.id));
-        console.log(this.bioAnnotations, this.selectedBioAnnotations, this.settings.bio_annotations);
         this.el.markForCheck();
       }).finally(() => this.procesingStates.fetchingBioAnnotations = false);
     }
