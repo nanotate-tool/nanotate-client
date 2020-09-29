@@ -1,0 +1,15 @@
+<a2np-l-nav-bar [fixed]="fixed">
+    <ng-container nav-bar-left>
+        <ng-content select="[page-nav-left]"></ng-content>
+    </ng-container>
+    <ng-container nav-bar-right>
+        <a2np-c-annotator-bookmark></a2np-c-annotator-bookmark>
+        <ng-content select="[page-nav-right]"></ng-content>
+    </ng-container>
+    <ng-container nav-bar-btw>
+        <ng-content select="[page-nav-btw]"></ng-content>
+    </ng-container>
+</a2np-l-nav-bar>
+<div class="page-body" [ngClass]="{ 'fixed' : fixed }">
+    <ng-content select="[page-body]"></ng-content>
+</div>

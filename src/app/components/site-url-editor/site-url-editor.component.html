@@ -1,0 +1,15 @@
+<form [formGroup]="form" [class]="{ 'p-fluid': !inline, 'p-formgroup-inline': inline }" (submit)="next()">
+    <div class="p-field p-text-center">
+        <h4 *ngIf="title">{{title}}</h4>
+        <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+                <i class="pi pi-search"></i>
+            </span>
+            <input pInputText class="site-input" [pattern]="_inputRegex" type="text" formControlName="site"
+                placeholder="https://mysite.com" />
+            <button *ngIf="showDeleteButton" pButton icon="pi pi-times" class="p-button-danger" type="button"
+                (click)="delete()"></button>
+        </div>
+    </div>
+    <p-button *ngIf="showContinueButton" type="submit" [disabled]="!form.valid" label="Continue"></p-button>
+</form>

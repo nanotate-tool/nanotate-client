@@ -1,0 +1,11 @@
+<ng-container *ngIf="withHelp; else link_button">
+    <div class="p-text-center">
+        <ng-container [ngTemplateOutlet]="link_button"></ng-container>
+        <h4>Pull the Button above at bookmark bar and annotate!</h4>
+    </div>
+</ng-container>
+
+<ng-template #link_button>
+    <a pButton class="p-button-rounded p-button-warning undecorated text-strong" pTooltip="Add to Bookmarks"
+        [label]="title" [href]="link|safeSanitize:'url'" (click)="preventsClick($event)"></a>
+</ng-template>

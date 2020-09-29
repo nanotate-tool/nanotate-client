@@ -1,0 +1,39 @@
+<div class="annotation-thread-list">
+    <div class="__header p-d-flex p-ai-center">
+        <h3 class="__header_title" style="flex: 1;">Annotations</h3>
+        <div class="__buttons_bar">
+            <button [disabled]="procesing" pButton icon="pi pi-refresh" class="p-button-text p-button-rounded"
+                (click)="search()"></button>
+        </div>
+    </div>
+    <div class="__annotations_wrapper p-d-flex p-flex-column p-jc-center">
+        <ng-container *ngIf="!procesing; else loading_template">
+            <ng-container *ngIf="!isEmpty; else empty_template">
+                <a2np-c-annotation-card *ngFor="let annotation of annotations" [annotation]="annotation">
+                    <ng-container footer>
+                        <button *ngIf="canShowNanopub(annotation)" pButton class="p-button-outlined p-button-text"
+                            label="Nanopub" icon="pi pi-file-o" (click)="nanopub(annotation)"></button>
+                        <button pButton class="p-button-outlined p-button-text" label="Edit" icon="pi pi-pencil"
+                            (click)="edit(annotation)"></button>
+                    </ng-container>
+                </a2np-c-annotation-card>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #loading_template>
+    <div class="__loading_wrapper p-text-center">
+        <i class="pi pi-spin pi-spinner" style="font-size: 5em"></i>
+        <span class="p-d-block p-p-2">Searching...</span>
+    </div>
+</ng-template>
+
+<ng-template #empty_template>
+    <div class="__empty_wrapper p-text-center">
+        <h4 class="p-text-danger" style="color: red;">
+            <i class="pi pi-ban"></i>
+            <span class="p-mx-1">No annotations found in site</span>
+        </h4>
+    </div>
+</ng-template>

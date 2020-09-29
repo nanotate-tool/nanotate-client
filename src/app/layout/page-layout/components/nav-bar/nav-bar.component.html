@@ -1,0 +1,20 @@
+<nav class="nav-bar" [ngClass]="{ 'fixed' : fixed }">
+    <div class="__body p-d-flex p-p-2">
+        <ng-content select="[nav-bar-left]"></ng-content>
+        <div #main_menu class="p-px-2 _segment _nav_menu">
+            <a pButton class="p-button p-button-link p-button-outlined _nav_menu_button" icon="icon pi pi-bars"
+                (click)="c_menu.toggle($event)"></a>
+            <p-slideMenu #c_menu styleClass="_nav_menu_popup" [appendTo]="main_menu" [model]="menu" [popup]="true"
+                [menuWidth]="200" [viewportHeight]="300">
+            </p-slideMenu>
+        </div>
+        <div class="_logo-wrapper p-px-1" class="_segment">
+            <img src="/assets/imgs/logo.png" height="100%">
+        </div>
+        <ng-content select="[nav-bar-btw]"></ng-content>
+        <div class="p-px-2 _segment " style="flex: 1;">
+            <a2np-c-site-url-editor [showDeleteButton]="true"></a2np-c-site-url-editor>
+        </div>
+        <ng-content select="[nav-bar-right]"></ng-content>
+    </div>
+</nav>

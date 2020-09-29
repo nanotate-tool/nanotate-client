@@ -1,0 +1,53 @@
+<form [formGroup]="form" (ngSubmit)="publish()" class="p-fluid p-formgrid annotation-editor">
+    <div class="annotation-card">
+        <p>You came from <a href="{{annotation.uri}}">{{annotation.document.title}}</a></p>
+        <p>In that page you selected:</p>
+        <blockquote class="__exact">{{exact}}</blockquote>
+    </div>
+    <div class="p-field">
+        <label>Tag</label>
+        <p-dropdown formControlName="tags" [options]="tagsItems" (onChange)="onChangeTag()">
+        </p-dropdown>
+    </div>
+    <div class="p-field">
+        <label>Ontology</label>
+        <p-dropdown formControlName="ontologies" [options]="ontologiesItems" (onChange)="onChangeOntology()">
+        </p-dropdown>
+    </div>
+    <div *ngIf="!isStepAnnotation" class="p-field p-p-2 _annotations_ontology_wrapper">
+        <div class="p-d-flex p-jc-between p-ai-center">
+            <h4 class="p-my-2">Annotations for <span class="p-tag">{{form.controls.ontologies.value}}</span></h4>
+            <div *ngIf="procesingStates.fetchingBioAnnotations; else bio_annotations_refresh">
+                <i class="pi pi-spin pi-spinner"></i>
+                <span class="p-px-2">Searching...</span>
+            </div>
+        </div>
+        <ng-container *ngIf="!procesingStates.fetchingBioAnnotations">
+            <ng-container *ngIf="bioAnnotations && bioAnnotations.length > 0; else bio_annotations_empty">
+                <a2np-c-bio-annotation-list [selectable]="true" [(selected)]="selectedBioAnnotations"
+                    [annotations]="bioAnnotations" [context]="exact">
+                </a2np-c-bio-annotation-list>
+            </ng-container>
+        </ng-container>
+        <ng-template #bio_annotations_refresh>
+            <button pButton icon="pi pi-refresh" class="p-button-text p-button-rounded"
+                (click)="onChangeOntology()"></button>
+        </ng-template>
+        <ng-template #bio_annotations_empty>
+            <div class="p-p-1">
+                <h5 class="p-my-1" style="color: red;">Annotations Not Found</h5>
+            </div>
+        </ng-template>
+    </div>
+    <div class="p-field">
+        <label>Please add comments here.</label>
+        <textarea pInputTextarea formControlName="text" rows="5" cols="60"></textarea>
+    </div>
+    <p>
+        When you're ready, please click the button to annotate your selection in {{annotation.document.title}} with this
+        information.
+    </p>
+    <div>
+        <button pButton type="submit" label="Publish"></button>
+    </div>
+</form>

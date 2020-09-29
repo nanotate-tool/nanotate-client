@@ -1,0 +1,59 @@
+@use '../variables.scss' as var;
+
+.annotation-card {
+    padding: 1em;
+    background-color: var.$annotation_card_bg_color;
+    margin-bottom: 1em;
+    border: 1px solid var.$default-border-color;
+
+    &:hover {
+        box-shadow: 0 2px 5px rgba($color: #000, $alpha: 0.2);
+    }
+
+    .__title {
+        font-weight: 600;
+        margin: 0 0 0.5em 0;
+        word-break: break-all;
+    }
+
+    .__exact {
+        //font-size: 0.7em;
+        font-style: italic;
+        color: #737373;
+        border-left: 6px solid var.$default-border-color;
+        padding-left: 1em;
+        margin: 0.5em 0;
+        &:hover {
+            border-left: var.$hover-border-color 6px solid;
+        }
+    }
+
+    .__text {
+        word-break: break-all;
+    }
+
+    .__tag-list {
+        list-style: none;
+        padding: 0;
+        margin: 0.5em 0;
+        ._tag-item {
+            border: 1px solid var.$default-border-color;
+            margin: 0.25em 0.5em 0.25em 0;
+            padding: 2px 0.5em;
+            background: #fafafa;
+            border-radius: 2px;
+
+            &.ontology {
+                background-color: var.$nanopub-ontology-color;
+                &,
+                > * {
+                    color: var.$nanopub-ontology-contrast-color !important;
+                }
+            }
+        }
+    }
+
+    .__annotation-footer {
+        text-align: right;
+    }
+}

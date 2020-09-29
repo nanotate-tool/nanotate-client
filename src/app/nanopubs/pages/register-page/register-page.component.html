@@ -1,0 +1,24 @@
+<div class="p-grid">
+    <div class="p-col-7">
+        <ng-container [ngSwitch]="perspective">
+            <ng-container *ngSwitchCase="'home'" [ngTemplateOutlet]="home_template">
+            </ng-container>
+            <ng-container *ngSwitchCase="'editor'">
+                <a2np-c-annotation-editor *ngIf="annotation" [annotation]="annotation" (onUpdate)="refreshAnnotations()">
+                </a2np-c-annotation-editor>
+            </ng-container>
+            <ng-container *ngSwitchCase="'nanopub'">
+                <a2np-c-nanopub-card [nanopub]="nanopub?.rdf"></a2np-c-nanopub-card>
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="p-col-5">
+        <a2np-c-annotation-thread-list [query]="query" (onAction)="handleAnnotation($event)">
+        </a2np-c-annotation-thread-list>
+    </div>
+</div>
+
+<ng-template #home_template>
+    <h5>Go to site an select text and annotate</h5>
+    <a href="{{app.siteData.url}}">Go to site</a>
+</ng-template>

@@ -1,0 +1,7 @@
+@use "../variables" as var;
+
+.annotation-editor {
+    ._annotations_ontology_wrapper {
+        background-color: rgba($color: var.$annotation_panel_color, $alpha: 1);
+    }
+}

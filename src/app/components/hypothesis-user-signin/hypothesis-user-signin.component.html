@@ -1,0 +1,25 @@
+<form [formGroup]="form" class="p-fluid p-formgrid h-user-signin" (submit)="_continue()">
+    <div class="__h_logo">
+        <img src="https://d242fdlp0qlcia.cloudfront.net/uploads/2017/04/16171750/hypothesislogomark.png"
+            alt="hypothes.is">
+    </div>
+    <div class="p-field">
+        <label>User</label>
+        <input pInputText type="text" formControlName="username" name="username">
+    </div>
+    <div class="p-field">
+        <label>Token</label>
+        <input pInputText type="password" formControlName="token" name="token">
+        <p>
+            <span class="p-p-1">Find it by logging in <a [href]="h_tokenUrl" target="_blank">here</a></span>
+        </p>
+    </div>
+    <div>
+        <p-button type="submit" label="Sign in" styleClass="p-button-danger" icon="pi pi-sign-in"></p-button>
+    </div>
+</form>
+<div #formContainer>
+    <div class="formField" id="userContainer"></div>
+    <div class="formField" id="groupContainer"></div>
+    <div class="formField" id="tokenContainer"></div>
+</div>

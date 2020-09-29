@@ -1,0 +1,29 @@
+<p-table [value]="annotations" [(selection)]="pselected" (onRowSelect)="onSelect.emit($event)">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th>Class</th>
+            <th>Ontology</th>
+            <th>Context</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-annotation>
+        <tr>
+            <td>
+                <p-tableCheckbox [value]="annotation"></p-tableCheckbox>
+            </td>
+            <td>
+                <a [href]="annotation.class" target="_blank" class="p-button p-button-link">{{annotation.prefLabel}}</a>
+            </td>
+            <td>
+                <a [href]="annotation.ontology" target="_blank"
+                    class="p-button p-button-link">{{annotation.ontologyLabel}}</a>
+            </td>
+            <td>
+                <span [innerHTML]="contextWithSelector(annotation.selector[0])|safeSanitize:'html'"></span>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

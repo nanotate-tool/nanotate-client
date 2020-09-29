@@ -1,0 +1,14 @@
+<section class="annotation-nanopub-body">
+    <div class="annotation-nanopub-body__wrapper">
+        <div class="__segment prefixs_wrapper">
+            <span *ngFor="let prefix of nanopub['@prefixs']" class="prefix">
+                <span class="pref">@prefix </span>
+                <span [innerHTML]="prefix|safeSanitize:'html'"></span>
+                <span>.</span>
+            </span>
+        </div>
+        <div *ngFor="let segment of segments" class="__segment" [ngClass]="segment.style"
+            [innerHTML]="nanopub[segment.key]|safeSanitize:'html'">
+        </div>
+    </div>
+</section>

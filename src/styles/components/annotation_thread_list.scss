@@ -1,0 +1,21 @@
+@use '../variables.scss' as var;
+
+.annotation-thread-list {
+    padding: 1em;
+    background-color: var.$annotation_panel_color;
+
+    .__annotations_wrapper {
+        min-height: 200px;
+    }
+
+    .__header {
+        margin-bottom: 0.5em;
+        &_title {
+            margin: 0;
+        }
+    }
+
+    .annotation-card {
+        font-size: 0.8em;
+    }
+}
