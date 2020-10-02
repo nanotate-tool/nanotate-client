@@ -54,21 +54,21 @@ export class AnnotationPropsComponent {
      * retorna el texto personalizado de la anotacion
      */
     get text(): string {
-        return this.annotation.text.replace(NANOPUBS.SETTINGS_PATTER, '');
+        return this.annotation && this.annotation.text ? this.annotation.text.replace(NANOPUBS.SETTINGS_PATTER, '') : '';
     }
 
     /**
      * tags de la anotacion
      */
     get tags(): string[] {
-        return this.annotation ? this.annotation.tags.filter(tag => !NANOPUBS.isOntologyTag(tag)) : [];
+        return this.annotation && this.annotation.tags ? this.annotation.tags.filter(tag => !NANOPUBS.isOntologyTag(tag)) : [];
     }
 
     /**
      * ontologias de la anotacion
      */
     get ontologies(): string[] {
-        return this.annotation ? this.annotation.tags.filter(tag => NANOPUBS.isOntologyTag(tag))
+        return this.annotation && this.annotation.tags ? this.annotation.tags.filter(tag => NANOPUBS.isOntologyTag(tag))
             .map(ontology => NANOPUBS.decodeOntologyTag(ontology)) : [];
     }
 
