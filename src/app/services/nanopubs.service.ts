@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Annotation, BioAnnotation } from '../models';
+import { Annotation, BioAnnotation, Nanopublication } from '../models';
 import { NanoPubApiConfig } from '../models/settings';
 import { NANOPUBS } from '../utils';
 
@@ -29,6 +29,26 @@ export class NanopubsService {
     return NanopubsService.default_config;
   }
 
+  /**
+   * retorna las nanopublicaciones relacionadas al protocolo 
+   * asociado al uri pasado
+   * @param protocol uri del protocolo
+   */
+  nanopubs(protocol: string): Promise<Nanopublication[]> {
+    return this.httpClient.get(this.apiUrl('nanopub'), {
+      params: { uri: protocol }
+    }).toPromise<any>()
+      .then((response: any) => {
+        if (response) {
+          return response.map(nanopub => {
+            nanopub['created_at'] = new Date(nanopub['created_at']);
+            nanopub['updated_at'] = new Date(nanopub['updated_at']);
+            return <Nanopublication>nanopub
+          })
+        }
+        return response;
+      });
+  }
 
   /**
    * realiza la publicacion de las annotaciones

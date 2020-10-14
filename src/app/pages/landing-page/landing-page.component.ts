@@ -21,7 +21,7 @@ export class LandingPageComponent extends BaseSubscriptionComponent implements O
   }
 
   next() {
-    this.app.continueAndRedirect('nanopubs/register');
+    this.app.continueAndRedirect('nanopubs');
   }
 
 }

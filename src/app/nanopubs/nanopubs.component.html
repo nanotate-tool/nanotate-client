@@ -1,6 +1,9 @@
 <a2np-l-page [fixed]="true">
     <ng-container page-nav-right></ng-container>
     <ng-container page-body>
-        <router-outlet></router-outlet>
+        <p-tabMenu [model]="tabs" [activeItem]="activeTab"></p-tabMenu>
+        <div class="p-py-2">
+            <router-outlet></router-outlet>
+        </div>
     </ng-container>
 </a2np-l-page>

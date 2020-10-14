@@ -12,6 +12,12 @@ a {
     &.undecorated {
         text-decoration: none;
     }
+    &.fixed {
+        .pi {
+            font-size: inherit;
+            color: #2196f3;
+        }
+    }
 }
 
 .page-body {

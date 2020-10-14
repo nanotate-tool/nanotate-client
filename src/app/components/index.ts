@@ -14,3 +14,5 @@ export * from './site-url-editor/site-url-editor.module';
 export * from './site-url-editor/site-url-editor.component';
 export * from './bio-annotation-list/bio-annotation-list.component';
 export * from './bio-annotation-list/bio-annotation-list.module';
+export * from './nanopub-card/nanopub-card.component';
+export * from './nanopub-card/nanopub-card.module';

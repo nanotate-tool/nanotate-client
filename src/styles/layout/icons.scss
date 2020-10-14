@@ -1,0 +1,13 @@
+
+@mixin own-icon {
+    font-size: 1em;
+    width: 1em;
+    height: 1em;
+}
+
+.i-hypothesis-logo{
+    @include own-icon();
+    background-image: url('../../assets/imgs/hypothesislogo.svg');
+    background-size: 1em;
+    background-repeat: no-repeat;
+}
