@@ -16,3 +16,5 @@ export * from './bio-annotation-list/bio-annotation-list.component';
 export * from './bio-annotation-list/bio-annotation-list.module';
 export * from './nanopub-card/nanopub-card.component';
 export * from './nanopub-card/nanopub-card.module';
+export * from './nanopub-publisher/nanopub-publisher.component';
+export * from './nanopub-publisher/nanopub-publisher.module';

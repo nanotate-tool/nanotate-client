@@ -1,5 +1,7 @@
 //============= TOOLS =============
 
+import { Annotation } from '../models';
+
 // custom settings vars for annotations
 const SETTINGS_STR_START: string = '===SETTINGS===\n';
 const SETTINGS_STR_END: string = '\n===END SETTINGS===\n';
@@ -151,6 +153,31 @@ export function formatAnnotation(annotation) {
             ontologies: annotation.tags.filter(isOntologyTag).map(tag => decodeOntologyTag(tag, false)),
             settings: settings
         }
+    }
+    return null;
+}
+
+/**
+ * rescata en la lista de anotaciones pasada la anotacion step asociada al identificador pasado
+ * y sus anotaciones relacionadas.
+ * 
+ * en caso de no encontrarse una anotacion asociada a la llave pasada y de tipo step se retornara null
+ * @param stepAnnotationKey llave de la anotacion step
+ * @param annotations lista de anotaciones
+ */
+export function rescueStepAnnotation(stepAnnotationKey: string, annotations: Annotation[]): Annotation[] {
+    const stepAnnotation = annotations.find(annotation => annotation.id === stepAnnotationKey && isStepAnnotation(annotation));
+    if (stepAnnotation) {
+        const stepMetadata = getAnnotationMetadata(stepAnnotation);
+        const final_annotations = annotations
+            .filter(annotation => !isStepAnnotation(annotation))
+            .filter(annotation => {
+                const annotationMetadata = getAnnotationMetadata(annotation);
+                return annotation.id != stepAnnotationKey &&
+                    annotationMetadata.start >= stepMetadata.start && annotationMetadata.end <= stepMetadata.end;
+            });
+
+        return [stepAnnotation].concat(final_annotations);
     }
     return null;
 }

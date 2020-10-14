@@ -30,7 +30,7 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
   /**
    * datos de la nanopublicacion que se esta presentando actualmente
    */
-  nanopub: any;
+  nanopub: any = {};
   private __query: any;
 
   constructor(private activeRoute: ActivatedRoute, private hypothesisService: HypothesisService,

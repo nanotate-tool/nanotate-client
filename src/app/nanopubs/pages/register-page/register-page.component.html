@@ -4,11 +4,13 @@
             <ng-container *ngSwitchCase="'home'" [ngTemplateOutlet]="home_template">
             </ng-container>
             <ng-container *ngSwitchCase="'editor'">
-                <a2np-c-annotation-editor *ngIf="annotation" [annotation]="annotation" (onUpdate)="refreshAnnotations()">
+                <a2np-c-annotation-editor *ngIf="annotation" [annotation]="annotation"
+                    (onUpdate)="refreshAnnotations()">
                 </a2np-c-annotation-editor>
             </ng-container>
             <ng-container *ngSwitchCase="'nanopub'">
-                <a2np-c-nanopub-rdf-body [nanopub]="nanopub?.rdf"></a2np-c-nanopub-rdf-body>
+                <a2np-c-nanopub-publisher [step]="nanopub.step" [annotations]="nanopub.annotations" >
+                </a2np-c-nanopub-publisher>
             </ng-container>
         </ng-container>
     </div>
@@ -21,4 +23,11 @@
 <ng-template #home_template>
     <h5>Go to site an select text and annotate</h5>
     <a href="{{app.siteData.url}}">Go to site</a>
+</ng-template>
+
+<ng-template #loading_template>
+    <div class="__loading_wrapper p-text-center">
+        <i class="pi pi-spin pi-spinner" style="font-size: 5em"></i>
+        <span class="p-d-block p-p-2">Searching...</span>
+    </div>
 </ng-template>

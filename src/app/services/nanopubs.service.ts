@@ -19,6 +19,10 @@ export class NanopubsService {
     ontologies: ['ERO', 'SP', 'CHEBI', 'OBI', 'BAO', 'NCBITAXON', 'UBERON', 'EFO'],
     tags: ['step', 'sample', 'reagent', 'equipment', 'input', 'output'],
   }
+  /**
+   * default rdf format in app
+   */
+  private static default_rdf_format: string = 'json-html';
 
   constructor(private httpClient: HttpClient) { }
 
@@ -30,21 +34,28 @@ export class NanopubsService {
   }
 
   /**
+   * retorna la nanopublicacion relacionada al identificador pasado
+   * @param id identificador de la nanopublicacion
+   */
+  nanopub(id: string): Promise<Nanopublication> {
+    return this.httpClient.get(this.apiUrl(`nanopub/${id}`), {
+      params: { rdf_format: NanopubsService.default_rdf_format }
+    }).toPromise<any>()
+      .then(this.parseNanopublication);
+  }
+
+  /**
    * retorna las nanopublicaciones relacionadas al protocolo 
    * asociado al uri pasado
    * @param protocol uri del protocolo
    */
   nanopubs(protocol: string): Promise<Nanopublication[]> {
     return this.httpClient.get(this.apiUrl('nanopub'), {
-      params: { uri: protocol }
+      params: { uri: protocol, rdf_format: NanopubsService.default_rdf_format }
     }).toPromise<any>()
       .then((response: any) => {
         if (response) {
-          return response.map(nanopub => {
-            nanopub['created_at'] = new Date(nanopub['created_at']);
-            nanopub['updated_at'] = new Date(nanopub['updated_at']);
-            return <Nanopublication>nanopub
-          })
+          return response.map(this.parseNanopublication)
         }
         return response;
       });
@@ -104,6 +115,18 @@ export class NanopubsService {
      */
   protected apiUrl(url): string {
     return `${this.config().apiUrl}/${url}`;
+  }
+
+  protected parseNanopublication(nanopub: any): Nanopublication {
+    if (nanopub) {
+      if (nanopub.error) {
+        throw nanopub.error;
+      }
+      nanopub['created_at'] = new Date(nanopub['created_at']);
+      nanopub['updated_at'] = new Date(nanopub['updated_at']);
+      return <Nanopublication>nanopub
+    }
+    return nanopub;
   }
 
 }

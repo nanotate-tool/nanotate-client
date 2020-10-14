@@ -2,7 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NanopubsRoutingModule } from './nanopubs-routing.module';
 import { RegisterPageComponent, NanopubsPageComponent } from './pages';
-import { AnnotationRegistrationModule, AnnotationThreadListModule, NanopubCardModule, NanopubRdfBodyModule, SiteUrlEditorModule } from '../components';
+import {
+  AnnotationRegistrationModule, AnnotationThreadListModule, NanopubCardModule, NanopubPublisherModule,
+  NanopubRdfBodyModule, SiteUrlEditorModule
+} from '../components';
 import { NanopubsComponent } from './nanopubs.component';
 import { PageLayoutModule } from '../layout';
 import { TabMenuModule } from 'primeng/tabmenu';
@@ -15,6 +18,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
     AnnotationRegistrationModule,
     AnnotationThreadListModule,
     NanopubRdfBodyModule,
+    NanopubPublisherModule,
     NanopubCardModule,
     SiteUrlEditorModule,
     TabMenuModule

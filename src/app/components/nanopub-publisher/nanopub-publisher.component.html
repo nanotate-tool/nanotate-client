@@ -1,0 +1,17 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <p-menubar [model]="menuModel"></p-menubar>
+    </div>
+    <div class="p-col-12">
+        <ng-container *ngIf="!procesing  else loading_template">
+            <a2np-c-nanopub-rdf-body [nanopub]="nanopub?.rdf"></a2np-c-nanopub-rdf-body>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #loading_template>
+    <div class="__loading_wrapper p-text-center p-my-6">
+        <i class="pi pi-spin pi-spinner" style="font-size: 5em"></i>
+        <span class="p-d-block p-p-2">{{processing_message}}</span>
+    </div>
+</ng-template>

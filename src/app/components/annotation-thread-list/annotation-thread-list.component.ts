@@ -23,7 +23,8 @@ export class AnnotationThreadListComponent implements OnInit, OnChanges {
    */
   procesing: boolean = false;
 
-  constructor(private hypothesisService: HypothesisService, private nanopubs: NanopubsService, private el: ChangeDetectorRef) { }
+  constructor(private hypothesisService: HypothesisService, private nanopubs: NanopubsService,
+    private el: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.search();
@@ -74,13 +75,14 @@ export class AnnotationThreadListComponent implements OnInit, OnChanges {
   }
 
   nanopub(annotation: Annotation) {
-    this.nanopubs.previewOf(annotation.id, { annotations: this.annotations }).then(response => {
-      this.onAction.emit({
-        action: 'nanopub',
-        annotation: annotation,
-        data: response
-      });
-    })
+    this.onAction.emit({
+      action: 'nanopub',
+      annotation: annotation,
+      data: {
+        step: annotation,
+        annotations: this.annotations
+      }
+    });
   }
 
 }

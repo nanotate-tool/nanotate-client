@@ -11,6 +11,8 @@ import { LandingPageComponent } from './pages/landing-page/landing-page.componen
 import { SiteUrlGuard } from './guards';
 import { AppService } from './services';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -23,12 +25,13 @@ import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    ToastModule,
     HypothesisUserSigninModule,
     SiteUrlEditorModule,
     AnnotatorBookmarkModule,
     DynamicDialogModule
   ],
-  providers: [AppService, SiteUrlGuard, DialogService],
+  providers: [AppService, SiteUrlGuard, DialogService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
