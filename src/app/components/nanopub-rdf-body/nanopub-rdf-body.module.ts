@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NanopubCardComponent } from './nanopub-card.component';
+import { NanopubRdfBodyComponent } from './nanopub-rdf-body.component';
 import { CommonModule as _Commons } from "../../common/common.module";
 
 @NgModule({
-  declarations: [NanopubCardComponent],
+  declarations: [NanopubRdfBodyComponent],
   imports: [
     CommonModule,
     _Commons
   ],
-  exports: [NanopubCardComponent]
+  exports: [NanopubRdfBodyComponent]
 })
-export class NanopubCardModule { }
+export class NanopubRdfBodyModule { }

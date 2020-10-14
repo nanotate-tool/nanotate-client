@@ -1,13 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { NanopubHtml } from 'src/app/models/nanopubs';
+import { NanopubHtml } from 'src/app/models';
 
 @Component({
-  selector: 'a2np-c-nanopub-card',
-  templateUrl: './nanopub-card.component.html',
-  styleUrls: ['./nanopub-card.component.scss'],
+  selector: 'a2np-c-nanopub-rdf-body',
+  templateUrl: './nanopub-rdf-body.component.html',
+  styleUrls: ['./nanopub-rdf-body.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NanopubCardComponent implements OnInit {
+export class NanopubRdfBodyComponent implements OnInit {
 
   @Input() nanopub: NanopubHtml;
 
@@ -26,6 +26,5 @@ export class NanopubCardComponent implements OnInit {
   get segments() {
     return this.__segments;
   }
-
 
 }

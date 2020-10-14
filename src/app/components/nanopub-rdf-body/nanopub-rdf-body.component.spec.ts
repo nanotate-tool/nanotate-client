@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NanopubCardComponent } from './nanopub-card.component';
+import { NanopubRdfBodyComponent } from './nanopub-rdf-body.component';
 
-describe('NanopubCardComponent', () => {
-  let component: NanopubCardComponent;
-  let fixture: ComponentFixture<NanopubCardComponent>;
+describe('NanopubRdfBodyComponent', () => {
+  let component: NanopubRdfBodyComponent;
+  let fixture: ComponentFixture<NanopubRdfBodyComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NanopubCardComponent ]
+      declarations: [ NanopubRdfBodyComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NanopubCardComponent);
+    fixture = TestBed.createComponent(NanopubRdfBodyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
