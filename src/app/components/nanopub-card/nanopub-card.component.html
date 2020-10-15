@@ -1,28 +1,54 @@
-<div class="nanopub-card p-shadow-3 p-p-3 p-mb-2">
-    <span class="__link_protocol p-text-bold">
-        <span class="p-mr-1">
-            <{{nanopub.protocol}}>
+<ng-container [ngSwitch]="layout">
+    <ng-container *ngSwitchCase="'inline'">
+        <ng-container *ngTemplateOutlet="inline_layout"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'normal'">
+        <ng-container *ngTemplateOutlet="normal_layout"></ng-container>
+    </ng-container>
+</ng-container>
+<ng-template #normal_layout>
+    <div class="nanopub-card p-shadow-3 p-p-3 p-mb-2">
+        <span class="__link_protocol p-text-bold">
+            <span class="p-mr-1">
+                <{{nanopub.protocol}}>
+            </span>
+            <a target="_blank" [href]="nanopub.protocol" class="fixed">
+                <i class="pi pi-external-link"></i>
+            </a>
         </span>
-        <a target="_blank" [href]="nanopub.protocol" class="fixed">
-            <i class="pi pi-external-link"></i>
-        </a>
-    </span>
-    <h4>{{nanopub.title}}</h4>
-    <div class="__info_wrapper p-m-1">
-        <div class="p-mb-1">
+        <h4>{{nanopub.title}}</h4>
+        <div class="__info_wrapper p-m-1">
+            <div class="p-mb-1">
+                <i class="pi pi-user"></i>
+                <span> Author: {{nanopub.author}}</span>
+            </div>
+            <div class="p-mb-1">
+                <i class="pi pi-calendar"></i>
+                <span> Generated : {{nanopub.created_at|date:'medium'}}</span>
+            </div>
+            <div class="p-mb-1">
+                <i class="pi pi-calendar"></i>
+                <span> Last update: {{nanopub.updated_at|date:'medium'}}</span>
+            </div>
+        </div>
+        <div class="__commands_wrapper">
+            <ng-content></ng-content>
+        </div>
+    </div>
+</ng-template>
+<ng-template #inline_layout>
+    <div class="nanopub-card p-shadow-2 inline p-p-2">
+        <span class="p-m-1">
             <i class="pi pi-user"></i>
             <span> Author: {{nanopub.author}}</span>
-        </div>
-        <div class="p-mb-1">
-            <i class="pi pi-calendar"></i>
-            <span> Generated : {{nanopub.created_at|date:'medium'}}</span>
-        </div>
-        <div class="p-mb-1">
+        </span>
+        <span class="p-m-1">
             <i class="pi pi-calendar"></i>
             <span> Last update: {{nanopub.updated_at|date:'medium'}}</span>
-        </div>
+        </span>
+        <span class="p-m-1">
+            <i class="pi i-hypothesis-logo"></i>
+            <span> Used annotations: {{nanopub.components?.length}}</span>
+        </span>
     </div>
-    <div class="__commands_wrapper">
-        <ng-content></ng-content>
-    </div>
-</div>
+</ng-template>

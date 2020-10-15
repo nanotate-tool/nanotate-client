@@ -9,6 +9,7 @@ import { Nanopublication } from 'src/app/models';
 })
 export class NanopubCardComponent implements OnInit {
 
+  @Input() layout: 'normal' | 'inline' = 'normal';
   @Input() nanopub: Nanopublication;
 
   constructor() { }
