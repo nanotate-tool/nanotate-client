@@ -19,6 +19,9 @@ export const SETTINGS_PATTER: RegExp = /===SETTINGS===\n(.*\===END SETTINGS===\n
  * @param source string a decodificar
  */
 export function decodeSettings(source: string): { [key: string]: string[] } {
+    if (!source) {
+        return {}
+    }
     let settings_matcher = source.match(SETTINGS_PATTER);
     if (!settings_matcher) {
         return {};
@@ -26,9 +29,11 @@ export function decodeSettings(source: string): { [key: string]: string[] } {
     let settings_str = settings_matcher.shift()
         .replace(SETTINGS_STR_START, '').replace(SETTINGS_STR_END, '');
     const settingsLines = settings_str.split('\n');
-    return settingsLines.reduce((settings, line) => {
+    return settingsLines.filter(line => line && true).reduce((settings, line) => {
         const entrySet = line.split(':');
-        settings[entrySet[0]] = entrySet[1].split(',').map(_var => propsSettings(_var, 'decode'));
+        if (entrySet && entrySet.length == 2) {
+            settings[entrySet[0]] = entrySet[1].split(',').map(_var => propsSettings(_var, 'decode'));
+        }
         return settings;
     }, {});
 }
@@ -39,7 +44,7 @@ export function decodeSettings(source: string): { [key: string]: string[] } {
  * @param settings settings a codificar
  */
 export function encodeSettings(settings: { [key: string]: string[] }): string {
-    let settings_entries = Object.entries(settings);
+    let settings_entries = Object.entries(settings || {});
     return settings_entries.reduce((str, entry) => {
         const [prop, value] = entry;
         if (value) {
