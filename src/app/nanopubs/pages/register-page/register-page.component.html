@@ -1,5 +1,5 @@
 <div class="p-grid">
-    <div class="p-col-7">
+    <div class="p-col-8">
         <ng-container [ngSwitch]="perspective">
             <ng-container *ngSwitchCase="'home'" [ngTemplateOutlet]="home_template">
             </ng-container>
@@ -14,7 +14,7 @@
             </ng-container>
         </ng-container>
     </div>
-    <div class="p-col-5">
+    <div class="p-col-4">
         <a2np-c-annotation-thread-list [query]="query" (onAction)="handleAnnotation($event)">
         </a2np-c-annotation-thread-list>
     </div>
