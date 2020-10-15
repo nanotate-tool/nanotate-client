@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
-import { Annotation } from 'src/app/models';
+import { Annotation, Nanopublication } from 'src/app/models';
 import { NanopubsService } from 'src/app/services';
 import { NANOPUBS } from "src/app/utils";
 
@@ -10,7 +10,7 @@ import { NANOPUBS } from "src/app/utils";
   styleUrls: ['./nanopub-publisher.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NanopubPublisherComponent implements OnInit {
+export class NanopubPublisherComponent implements OnInit, OnChanges {
 
   @Input() step: Annotation;
   @Input() annotations: Annotation[];
@@ -26,16 +26,30 @@ export class NanopubPublisherComponent implements OnInit {
 
   procesing: boolean = false;
   processing_message: string = 'Processing...';
+  /**
+   * ultima version de la nanopublicacion almacenada
+   */
+  remoteNanopublication: Nanopublication;
 
   constructor(private nanopubsService: NanopubsService, private el: ChangeDetectorRef,
     private messageService: MessageService) { }
 
+
   ngOnInit(): void {
-    this.menuModel = [
-      { label: 'Publish', icon: "pi pi-save", command: () => this.save() },
-      { label: 'Reload', icon: "pi pi-refresh", command: () => this.previewNanopub() }
-    ];
+    this.buildMenuBarModel();
+    this.refresh()
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const has_change = ['step', 'annotations'].reduce((a, f) => a || changes[f] && !changes[f].isFirstChange(), false);
+    if(has_change){
+      this.refresh();
+    }
+  }
+
+  refresh() {
     this.previewNanopub();
+    this.fetchRemoteNanopub();
   }
 
   /**
@@ -60,6 +74,7 @@ export class NanopubPublisherComponent implements OnInit {
             .publish(NANOPUBS.rescueStepAnnotation(this.step.id, this.annotations))
             .then(response => {
               this.messageService.add({ severity: 'success', summary: 'Ok on publishing' })
+              this.refresh();
               return response;
             })
         );
@@ -96,6 +111,25 @@ export class NanopubPublisherComponent implements OnInit {
       this.procesing = false;
       this.el.markForCheck();
     });
+  }
+
+  /**
+   * consulta en la api la ultima version de la nanopublicacion
+   * en la api
+   */
+  private fetchRemoteNanopub() {
+    return this.nanopubsService.nanopub(this.step.id)
+      .then(response => {
+        this.remoteNanopublication = response;
+        this.el.markForCheck();
+      }).catch(err=>{});
+  }
+
+  private buildMenuBarModel() {
+    this.menuModel = [
+      { label: 'Publish', icon: "pi pi-save", command: () => this.save() },
+      { label: 'Reload', icon: "pi pi-refresh", command: () => this.refresh() }
+    ];
   }
 
 }

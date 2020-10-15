@@ -1,6 +1,15 @@
-<div class="p-grid">
+<div class="nanopub-publisher p-grid">
     <div class="p-col-12">
         <p-menubar [model]="menuModel"></p-menubar>
+    </div>
+    <div class="p-col-12">
+        <h4 class="p-my-1">Status of Nanopub</h4>
+        <ng-container *ngIf="remoteNanopublication else empty_remote_nanopub">
+            <a2np-c-nanopub-card [nanopub]="remoteNanopublication" layout="inline"></a2np-c-nanopub-card>
+        </ng-container>
+        <ng-template #empty_remote_nanopub>
+            <h5 class="p-my-0" style="color:red">No published</h5>
+        </ng-template>
     </div>
     <div class="p-col-12">
         <ng-container *ngIf="!procesing  else loading_template">
