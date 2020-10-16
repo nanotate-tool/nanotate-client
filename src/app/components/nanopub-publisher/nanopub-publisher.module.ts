@@ -4,14 +4,15 @@ import { NanopubPublisherComponent } from './nanopub-publisher.component';
 import { MenubarModule } from "primeng/menubar";
 import { NanopubRdfBodyModule } from '../nanopub-rdf-body/nanopub-rdf-body.module';
 import { NanopubCardModule } from '../nanopub-card/nanopub-card.module';
-
+import { NgxTextDiffModule } from "ngx-text-diff";
 @NgModule({
   declarations: [NanopubPublisherComponent],
   imports: [
     CommonModule,
     MenubarModule,
     NanopubRdfBodyModule,
-    NanopubCardModule
+    NanopubCardModule,
+    NgxTextDiffModule
   ],
   exports: [NanopubPublisherComponent]
 })

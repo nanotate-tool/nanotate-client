@@ -33,5 +33,5 @@ export interface Nanopublication {
     created_at: Date;
     updated_at: Date;
     protocol: string;
-    rdf_raw: string;
+    rdf_raw: any;
 }

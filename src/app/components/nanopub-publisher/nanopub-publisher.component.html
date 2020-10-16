@@ -1,25 +1,57 @@
 <div class="nanopub-publisher p-grid">
-    <div class="p-col-12">
-        <p-menubar [model]="menuModel"></p-menubar>
-    </div>
-    <div class="p-col-12">
-        <h4 class="p-my-1">Status of Nanopub</h4>
-        <ng-container *ngIf="remoteNanopublication else empty_remote_nanopub">
-            <a2np-c-nanopub-card [nanopub]="remoteNanopublication" layout="inline"></a2np-c-nanopub-card>
-        </ng-container>
-        <ng-template #empty_remote_nanopub>
-            <h5 class="p-my-0" style="color:red">No published</h5>
-        </ng-template>
-    </div>
-    <div class="p-col-12">
-        <ng-container *ngIf="!procesing  else loading_template">
-            <a2np-c-nanopub-rdf-body [nanopub]="nanopub?.rdf"></a2np-c-nanopub-rdf-body>
-        </ng-container>
-    </div>
+    <ng-container *ngIf="!procesing else loading_template">
+        <div class="p-col-12">
+            <p-menubar [model]="menuModel">
+                <span *ngIf="hasDiff?.have"
+                    class="_status_wrapper p-overlay-badge p-mr-3 p-pr-2 p-pt-1 ng-star-inserted">
+                    <span class="label diff-status">Differences with server</span>
+                    <span class="p-badge p-badge-info">{{hasDiff.amount}}</span>
+                </span>
+                <span *ngIf="!hasDiff?.have" class="_status_wrapper label ok-status">
+                    OK Synchronized
+                </span>
+            </p-menubar>
+        </div>
+        <div class="p-col-12">
+            <h4 class="p-my-1">Status of Nanopublication in server</h4>
+            <ng-container *ngIf="remoteNanopublication else empty_remote_nanopub">
+                <a2np-c-nanopub-card [nanopub]="remoteNanopublication" layout="inline"></a2np-c-nanopub-card>
+            </ng-container>
+            <ng-template #empty_remote_nanopub>
+                <h5 class="p-my-0" style="color:red">No published</h5>
+            </ng-template>
+        </div>
+        <div class="p-col-12">
+            <ng-container [ngSwitch]="perspective">
+                <ng-container *ngSwitchCase="'rdf'" [ngTemplateOutlet]="rdf_perspective">
+                </ng-container>
+                <ng-container *ngSwitchCase="'compare'" [ngTemplateOutlet]="compare_perspective">
+                </ng-container>
+            </ng-container>
+        </div>
+    </ng-container>
 </div>
 
+<ng-template #rdf_perspective>
+    <h4 class="p-my-1">Nanopublication generated from annotations</h4>
+    <a2np-c-nanopub-rdf-body [nanopub]="nanopub?.rdf"></a2np-c-nanopub-rdf-body>
+</ng-template>
+
+<ng-template #compare_perspective>
+    <p>
+        <strong>Note:</strong>
+        <br>
+        left panel is the current server version
+        <br>
+        right panel is the local version
+    </p>
+    <td-ngx-text-diff *ngIf="nanopub && remoteNanopublication && true" [right]="nanopub.rdf.exact"
+        [left]="remoteNanopublication.rdf_raw.exact" (compareResults)="_elresfresh()">
+    </td-ngx-text-diff>
+</ng-template>
+
 <ng-template #loading_template>
-    <div class="__loading_wrapper p-text-center p-my-6">
+    <div class="__loading_wrapper p-text-center p-my-6 p-col-12">
         <i class="pi pi-spin pi-spinner" style="font-size: 5em"></i>
         <span class="p-d-block p-p-2">{{processing_message}}</span>
     </div>

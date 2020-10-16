@@ -1,0 +1,14 @@
+.nanopub-publisher {
+    ._status_wrapper {
+        &.label,
+        .label {
+            font-size: 1.2em;
+            &.ok-status {
+                color: green;
+            }
+            &.diff-status {
+                color: #0288d1;
+            }
+        }
+    }
+}

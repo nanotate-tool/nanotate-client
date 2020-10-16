@@ -3,7 +3,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { Annotation, Nanopublication } from 'src/app/models';
 import { NanopubsService } from 'src/app/services';
 import { NANOPUBS } from "src/app/utils";
-
+import { NgxTextDiffService } from "ngx-text-diff";
 @Component({
   selector: 'a2np-c-nanopub-publisher',
   templateUrl: './nanopub-publisher.component.html',
@@ -23,33 +23,61 @@ export class NanopubPublisherComponent implements OnInit, OnChanges {
    * modelo del menu de opciones
    */
   menuModel: MenuItem[];
-
-  procesing: boolean = false;
-  processing_message: string = 'Processing...';
   /**
    * ultima version de la nanopublicacion almacenada
    */
   remoteNanopublication: Nanopublication;
+  /**
+   * perspectiva del componente
+   */
+  perspective: 'rdf' | 'compare' = 'rdf';
+  /**
+   * determina si hay diferencia de la version del server
+   */
+  hasDiff: { have: boolean, amount: number };
+
+  procesing: boolean = false;
+  processing_message: string = 'Processing...';
 
   constructor(private nanopubsService: NanopubsService, private el: ChangeDetectorRef,
-    private messageService: MessageService) { }
+    private messageService: MessageService, private diffService: NgxTextDiffService) { }
 
 
   ngOnInit(): void {
-    this.buildMenuBarModel();
-    this.refresh()
+    this.refresh();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     const has_change = ['step', 'annotations'].reduce((a, f) => a || changes[f] && !changes[f].isFirstChange(), false);
-    if(has_change){
+    if (has_change) {
       this.refresh();
     }
   }
 
+  /**
+   * realiza el proceso de refrescado del estado general del componente
+   */
   refresh() {
-    this.previewNanopub();
-    this.fetchRemoteNanopub();
+    this.remoteNanopublication = null;
+    this.nanopub = null;
+    this.perspective = 'rdf';
+    this.procesing = true;
+    this.hasDiff = { have: false, amount: 0 };
+    Promise.all([
+      this.fetchRemoteNanopub(),
+      this.previewNanopub(),
+    ]).then((a) => this.calculeIfhasDiff())
+      .then(() => {
+        console.log(this.hasDiff);
+        this.buildMenuBarModel();
+      }).finally(() => {
+        this.procesing = false;
+        this.el.markForCheck();
+      })
+  }
+
+  _elresfresh() {
+    this.el.markForCheck()
   }
 
   /**
@@ -74,7 +102,6 @@ export class NanopubPublisherComponent implements OnInit, OnChanges {
             .publish(NANOPUBS.rescueStepAnnotation(this.step.id, this.annotations))
             .then(response => {
               this.messageService.add({ severity: 'success', summary: 'Ok on publishing' })
-              this.refresh();
               return response;
             })
         );
@@ -86,6 +113,7 @@ export class NanopubPublisherComponent implements OnInit, OnChanges {
     }).finally(() => {
       this.procesing = false;
       this.el.markForCheck();
+      this.refresh();
     });
   }
 
@@ -94,10 +122,9 @@ export class NanopubPublisherComponent implements OnInit, OnChanges {
    * generar de las anotaciones pasadas
    */
   previewNanopub() {
-    this.procesing = true;
-    this.processing_message = 'Generating Preview...';
-    this.el.markForCheck();
     return new Promise((resolve, reject) => {
+      this.processing_message = 'Generating Preview...';
+      this.el.markForCheck();
       if (this.valid) {
         resolve(this.nanopubsService.previewOf(this.step.id, { annotations: this.annotations })
           .then(response => {
@@ -105,11 +132,8 @@ export class NanopubPublisherComponent implements OnInit, OnChanges {
             return this.nanopub;
           }));
       } else {
-        reject('Invalid Status')
+        reject('Invalid component status')
       }
-    }).finally(() => {
-      this.procesing = false;
-      this.el.markForCheck();
     });
   }
 
@@ -118,18 +142,56 @@ export class NanopubPublisherComponent implements OnInit, OnChanges {
    * en la api
    */
   private fetchRemoteNanopub() {
-    return this.nanopubsService.nanopub(this.step.id)
-      .then(response => {
-        this.remoteNanopublication = response;
-        this.el.markForCheck();
-      }).catch(err=>{});
+    return new Promise((resolve) => {
+      this.processing_message = 'Search nanopublication...';
+      this.el.markForCheck();
+      resolve(this.nanopubsService.nanopub(this.step.id)
+        .then(response => {
+          this.remoteNanopublication = response;
+          this.el.markForCheck();
+        }).catch(err => { })
+      );
+    });
   }
 
   private buildMenuBarModel() {
     this.menuModel = [
-      { label: 'Publish', icon: "pi pi-save", command: () => this.save() },
-      { label: 'Reload', icon: "pi pi-refresh", command: () => this.refresh() }
+      { label: 'Reload', icon: "pi pi-refresh", command: () => this.refresh() },
+      {
+        label: this.perspective == 'rdf' ? 'Compare' : 'See rdf',
+        icon: this.perspective == 'rdf' ? "pi pi-search" : "pi pi-file",
+        command: () => {
+          this.perspective = this.perspective != 'compare' ? 'compare' : 'rdf'
+          this.buildMenuBarModel();
+          this.el.markForCheck();
+        },
+        disabled: this.remoteNanopublication == null
+      },
+      { label: 'Publish nanopublication', icon: "pi pi-cloud-upload", command: () => this.save() }
     ];
+  }
+
+  /**
+   * realiza el calculo si hay diferencias entre la nanopublicacion local con la
+   * disponible en el server
+   */
+  private async calculeIfhasDiff() {
+    if (this.nanopub?.rdf?.exact && this.remoteNanopublication?.rdf_raw?.exact) {
+      this.processing_message = 'Analizing...';
+      return this.diffService.getDiffsByLines(this.remoteNanopublication.rdf_raw.exact, this.nanopub.rdf.exact)
+        .then(data => {
+          const initialState = { have: false, amount: 0 };
+          this.hasDiff = data.reduce((a, item) => {
+            if (item.hasDiffs) {
+              a.have = item.hasDiffs;
+              a.amount = a.amount + 1;
+            }
+            return a;
+          }, initialState);
+          return this.hasDiff.have;
+        })
+    }
+    return false;
   }
 
 }
