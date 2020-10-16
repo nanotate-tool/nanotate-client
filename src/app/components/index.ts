@@ -4,6 +4,7 @@ export * from './annotation-thread-list/annotation-thread-list.module';
 export * from './annotation-thread-list/annotation-thread-list.component';
 export * from './annotation-card/annotation-card.module';
 export * from './annotation-card/annotation-card.component';
+export * from './nanopub-rdf-body/nanopub-rdf-body-dialog.component';
 export * from './nanopub-rdf-body/nanopub-rdf-body.component';
 export * from './nanopub-rdf-body/nanopub-rdf-body.module';
 export * from './hypothesis-user-signin/hypothesis-user-signin.component';
