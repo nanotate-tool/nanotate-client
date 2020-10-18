@@ -5,3 +5,4 @@ export * from './nanopubs';
 export * from './bio-portal';
 export * from './site_metadata';
 export * from './protocols';
+export * from './hypothesis';
