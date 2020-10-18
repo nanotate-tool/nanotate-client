@@ -15,7 +15,6 @@ export class SiteMetadataCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.metadata)
   }
 
   get ngStyles() {
