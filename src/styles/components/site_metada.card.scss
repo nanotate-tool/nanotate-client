@@ -1,0 +1,69 @@
+@use '../variables.scss' as vars;
+
+.site_metadata_card {
+    font-size: 0.8em;
+    padding: 2em 1.5em;
+    position: relative;
+    border-radius: 1.5em;
+
+    &:before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        filter: blur(20px);
+        opacity: 0.5;
+        z-index: -1;
+        background-color: gray;
+        background-position: center;
+        background-size: 150% 150%;
+        background-image: var(--site-image);
+    }
+
+    ._main_image {
+        text-align: center;
+        img {
+            max-width: 150px;
+            width: 100%;
+            border-radius: 50%;
+            box-shadow: vars.$default-box-shadow;
+        }
+    }
+
+    ._data_wrapper {
+        ._field {
+            padding: 0.5em 0;
+            label {
+                display: block;
+                font-weight: 600;
+            }
+
+            p {
+                margin: 0;
+                margin-top: 0.2em;
+            }
+
+            a {
+                color: vars.$hover-border-color !important;
+                
+                i {
+                    margin-right: 0.2em;
+                }
+
+                &:not(:first-child) {
+                    margin-left: 1em;
+                }
+            }
+
+            &.inline {
+                label {
+                    margin-right: 0.2em;
+                    display: initial;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

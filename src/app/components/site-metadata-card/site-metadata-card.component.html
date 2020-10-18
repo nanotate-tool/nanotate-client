@@ -1,0 +1,35 @@
+<div class="site_metadata_card p-shadow-3" [style]="ngStyles">
+    <div class="_main_image">
+        <img [src]="metadata?.image">
+    </div>
+    <div class="_data_wrapper">
+        <section>
+            <h3>{{metadata?.title}}</h3>
+            <div class="_field">
+                <label>Description</label>
+                <p>{{metadata?.description}}</p>
+            </div>
+            <div class="_field">
+                <label>Author(s)</label>
+                <p>{{authors}}</p>
+            </div>
+            <div class="_field inline">
+                <label>Type: </label>
+                <span>{{type}}</span>
+            </div>
+            <div *ngIf="metadata?.pdf" class="_field inline">
+                <a [href]="metadata?.pdf" target="_blank">
+                    <i class="pi pi-external-link"></i>
+                    <label>Pdf Resource</label>
+                </a>
+                <a [href]="metadata?.uri" target="_blank">
+                    <i class="pi pi-external-link"></i>
+                    <label>Go to Site</label>
+                </a>
+            </div>
+            <div class="_field inline">
+                
+            </div>
+        </section>
+    </div>
+</div>

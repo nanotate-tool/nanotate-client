@@ -19,3 +19,5 @@ export * from './nanopub-card/nanopub-card.component';
 export * from './nanopub-card/nanopub-card.module';
 export * from './nanopub-publisher/nanopub-publisher.component';
 export * from './nanopub-publisher/nanopub-publisher.module';
+export * from './site-metadata-card/site-metadata-card.component';
+export * from './site-metadata-card/site-metadata-card.module';
