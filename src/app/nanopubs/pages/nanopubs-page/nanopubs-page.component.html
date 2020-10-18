@@ -1,6 +1,14 @@
-<div class="p-grid">
-    <div class="p-col-7">
-        <a2np-c-nanopub-card *ngFor="let nanopub of nanopubs" [nanopub]="nanopub">
-        </a2np-c-nanopub-card>
+<div class="p-grid p-jc-center">
+    <div class="p-col-8">
+        <a2np-c-nanopub-list></a2np-c-nanopub-list>
+    </div>
+    <div class="p-col-4">
+        <ng-container *ngIf="procesingSitedata else loading_panel">
+            <a2np-c-site-metadata-card [metadata]="siteMetadata"></a2np-c-site-metadata-card>
+        </ng-container>
     </div>
 </div>
+
+<ng-template #loading_panel>
+    <a2np-c-loading-panel message="Loading..."></a2np-c-loading-panel>
+</ng-template>
