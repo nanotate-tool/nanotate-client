@@ -1,9 +1,15 @@
-<a2np-l-page [fixed]="true">
-    <ng-container page-nav-right></ng-container>
-    <ng-container page-body>
-        <p-tabMenu [model]="tabs" ></p-tabMenu>
-        <div class="p-py-2">
-            <router-outlet></router-outlet>
-        </div>
-    </ng-container>
-</a2np-l-page>
+<ng-container *ngIf="loaded else loading_panel">
+    <a2np-l-page [fixed]="true">
+        <ng-container page-nav-right></ng-container>
+        <ng-container page-body>
+            <p-tabMenu [model]="tabs"></p-tabMenu>
+            <div class="p-py-2">
+                <router-outlet></router-outlet>
+            </div>
+        </ng-container>
+    </a2np-l-page>
+</ng-container>
+
+<ng-template #loading_panel>
+    <a2np-c-loading-panel message="Loading..."></a2np-c-loading-panel>
+</ng-template>
