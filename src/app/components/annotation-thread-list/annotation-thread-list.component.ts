@@ -23,17 +23,29 @@ export class AnnotationThreadListComponent implements OnInit, OnChanges {
    */
   procesing: boolean = false;
 
-  constructor(private hypothesisService: HypothesisService, private nanopubs: NanopubsService,
+  constructor(public hypothesisService: HypothesisService, private nanopubs: NanopubsService,
     private el: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.search();
+    this.hypothesisService.onProfileChange((profile) => {
+      this.procesing = !profile && true;
+    });
+    if (this.hypothesisService.fullLoaded) {
+      this.search();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['query'] && !changes['query'].firstChange) {
       this.search();
     }
+  }
+
+  /**
+   * lista de grupos disponibles
+   */
+  get groups() {
+    return this.hypothesisService.profileData?.groups;
   }
 
   /**

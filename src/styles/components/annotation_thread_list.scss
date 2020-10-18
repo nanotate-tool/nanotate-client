@@ -10,8 +10,21 @@
 
     .__header {
         margin-bottom: 0.5em;
+
         &_title {
-            margin: 0;
+            margin: .5em 0;
+        }
+
+        &_logo {
+            width: 32px;
+            height: 100%;
+            min-height: 32px;
+            background-size: auto 32px;
+            display: inline-block;
+        }
+
+        ._main_bar {
+            flex: 1;
         }
     }
 
