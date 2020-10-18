@@ -1,0 +1,21 @@
+<ng-container *ngIf="!procesing else loading_panel">
+    <div class="p-d-flex p-ai-center">
+        <h2 style="flex: 1;">NanoPublications In Site</h2>
+        <div class="__buttons_bar">
+            <button pButton [disabled]="procesing" icon="pi pi-refresh" class="p-button-text p-button-rounded"
+                (click)="reload()" label="Refresh"></button>
+        </div>
+    </div>
+    <div class="">
+        <a2np-c-nanopub-card *ngFor="let nanopub of nanopubs" [nanopub]="nanopub">
+            <div class="p-mt-2 p-text-center">
+                <p-button styleClass="p-button-outlined p-button-text" icon="pi pi-file-o" label="Nanopub"
+                    (onClick)="showRdfOfNanopub(nanopub.rdf_raw)"></p-button>
+            </div>
+        </a2np-c-nanopub-card>
+    </div>
+</ng-container>
+
+<ng-template #loading_panel>
+    <a2np-c-loading-panel [message]="procesingMessage"></a2np-c-loading-panel>
+</ng-template>

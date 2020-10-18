@@ -23,3 +23,5 @@ export * from './site-metadata-card/site-metadata-card.component';
 export * from './site-metadata-card/site-metadata-card.module';
 export * from './loading-panel/loading-panel.component';
 export * from './loading-panel/loading-panel.module';
+export * from './nanopub-list/nanopub-list.component';
+export * from './nanopub-list/nanopub-list.module';
