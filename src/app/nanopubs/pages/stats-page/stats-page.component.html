@@ -1,0 +1,48 @@
+<div class="p-grid p-jc-center">
+    <div class="p-col-8 stats_viewer_component">
+        <h1>Stats of Site (preview)</h1>
+        <ng-container *ngIf="stats">
+            <div>
+                <h3>Tags</h3>
+                <label *ngFor="let tag of stats.tags" class="__stat-counter">
+                    <span class="label">{{tag.label}}</span>
+                    <span class="counter">{{tag.count}}</span>
+                </label>
+            </div>
+            <div>
+                <h3>Ontologies</h3>
+                <label *ngFor="let ontology of stats.ontologies" class="__stat-counter">
+                    <span class="label">{{ontology.label}}</span>
+                    <span class="counter">{{ontology.count}}</span>
+                </label>
+            </div>
+
+            <div>
+                <h3>Terms</h3>
+                <label *ngFor="let term of stats.terms.used" class="__stat-counter">
+                    <span class="label">'{{term.label}}'</span>
+                    <span class="counter">{{term.count}}</span>
+                </label>
+                <br>
+                <label *ngFor="let term of stats.terms.related" class="__stat-counter container">
+                    <span class="label">'{{term.term}}'</span>
+                    <label class="__stat-counter" *ngFor="let uri of  term.uris">
+                        <span class="label">
+                            <{{uri.label}}>
+                        </span>
+                        <span class="counter">{{uri.count}}</span>
+                    </label>
+                </label>
+            </div>
+        </ng-container>
+    </div>
+    <div class="p-col-4">
+        <ng-container *ngIf="procesingSitedata else loading_panel">
+            <a2np-c-site-metadata-card [metadata]="siteMetadata"></a2np-c-site-metadata-card>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #loading_panel>
+    <a2np-c-loading-panel message="Loading..."></a2np-c-loading-panel>
+</ng-template>

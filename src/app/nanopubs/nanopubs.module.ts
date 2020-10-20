@@ -9,6 +9,7 @@ import {
 import { NanopubsComponent } from './nanopubs.component';
 import { PageLayoutModule } from '../layout';
 import { TabMenuModule } from "primeng/tabmenu";
+import { StatsPageComponent } from './pages/stats-page/stats-page.component';
 
 @NgModule({
   imports: [
@@ -26,6 +27,6 @@ import { TabMenuModule } from "primeng/tabmenu";
     NanopubListModule,
     LoadingPanelModule
   ],
-  declarations: [RegisterPageComponent, NanopubsComponent, NanopubsPageComponent]
+  declarations: [RegisterPageComponent, NanopubsComponent, NanopubsPageComponent, StatsPageComponent]
 })
 export class NanopubsModule { }

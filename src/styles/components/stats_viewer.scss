@@ -1,0 +1,43 @@
+@use '../variables.scss' as vars;
+
+.stats_viewer_component {
+    .__stat-counter {
+        display: inline-block;
+        margin: 0.2em 0.5em;
+        padding: 0.3em 0.5em;
+        background-color: vars.$annotation_panel_color;
+        border-radius: 0.5em;
+        box-shadow: vars.$default-box-shadow;
+
+        .label,
+        .counter {
+            font-weight: 600;
+        }
+        .label {
+            margin: 0 0.2em;
+            font-size: 1em;
+        }
+        .counter {
+            font-size: 1.2em;
+            min-width: 1.5em;
+            min-height: 1.5em;
+            text-align: center;
+            background-color: vars.$primary-color;
+            color: vars.$primary-color-contrast;
+            display: inline-block;
+            border-radius: 50%;
+        }
+
+        &.container {
+            display: block;
+        }
+
+        > .__stat-counter {
+            font-size: 0.9em;
+            box-shadow: none;
+            .label {
+                color: darken($color: vars.$hover-border-color, $amount: 20);
+            }
+        }
+    }
+}
