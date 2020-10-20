@@ -32,6 +32,7 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
    */
   nanopub: any = {};
   private __query: any;
+  private uri_snapshot: string;
 
   constructor(private activeRoute: ActivatedRoute, private hypothesisService: HypothesisService,
     public app: AppService, private router: Router) {
@@ -39,6 +40,7 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
   }
 
   ngOnInit(): void {
+    this.uri_snapshot = this.app.siteData.url;
     // routing events
     this.addSubscription(this.activeRoute.queryParams.subscribe((params) => this.handleQueryParams(params)));
     // app reload
@@ -57,7 +59,10 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
    * de la pagina
    */
   refreshAnnotations() {
-    this.perspective = 'home';
+    if (this.uri_snapshot != this.app.siteData.url) {
+      this.perspective = 'home';
+      this.uri_snapshot = this.app.siteData.url;
+    }
     this.__query = null;
     //this.annotationsThread.search();
   }
