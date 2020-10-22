@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, AfterViewInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SelectItem } from 'primeng/api';
+import { MessageService, SelectItem } from 'primeng/api';
 import { Annotation, AnnotationRequest, BioAnnotation } from 'src/app/models';
 import { HypothesisService, NanopubsService } from 'src/app/services';
 import { AnnotationPropsComponent, NANOPUBS } from 'src/app/utils';
@@ -40,7 +40,7 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
   procesingStates = { fetchingBioAnnotations: false, saving: false };
 
   constructor(private hypothesisService: HypothesisService, private fb: FormBuilder, private nanopubs: NanopubsService,
-    private el: ChangeDetectorRef) {
+    private el: ChangeDetectorRef, private messageService: MessageService) {
     super();
   }
 
@@ -60,6 +60,16 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
       this.onChangeOntology(false);
     }
     return this._form;
+  }
+
+  /**
+   * determina si se muestra el buscador de anotaciones para la ontologia
+   */
+  get canShowAnnotationSeachs(): boolean {
+    const tags = this.form.controls.tags.value;
+    const ontologies = this.form.controls.ontologies.value
+    return (!NANOPUBS.isStepAnnotation({ tags: [tags] }) && tags
+      && ontologies) && true;
   }
 
   /**
@@ -93,10 +103,13 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
       const annotation = this.rawAnnotation;
       const _operation = annotation.id ? this.hypothesisService.updateAnnotation(annotation) : this.hypothesisService.postAnnotation(annotation);
       _operation.then(response => {
-        if (response) {
+        if (response?.response) {
           this.annotation = response.response;
           this.onUpdate.emit(response.response);
           this.reload();
+          this.messageService.add({ severity: 'success', summary: 'Ok on publishing' })
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Error on publishing', detail: response?.reason })
         }
       });
     }
