@@ -30,10 +30,16 @@ a {
     &.fixed {
         padding-top: var.$nav-bar-fixed-height + 15;
     }
+
+    .site-title {
+        margin: 0.1em 0;
+        font-size: 6em;
+        color: var.$primary-color;
+    }
 }
 
 .p-button {
-    background: #f05742;
-    border: 1px solid #f05742;
+    background: var.$primary-color;
+    border: 1px solid var.$primary-color;
     color: white;
 }

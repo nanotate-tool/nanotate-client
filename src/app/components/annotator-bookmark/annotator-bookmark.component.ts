@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { AppService } from 'src/app/services';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'a2np-c-annotator-bookmark',
@@ -10,7 +11,7 @@ import { AppService } from 'src/app/services';
 export class AnnotatorBookmarkComponent implements OnInit {
   @Input() withHelp: boolean = false;
 
-  title: string = 'Nanopublications';
+  title: string = environment.info.title;
 
   constructor(private app: AppService) { }
 

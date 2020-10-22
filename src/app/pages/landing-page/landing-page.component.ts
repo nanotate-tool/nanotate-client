@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppService } from 'src/app/services';
 import { BaseSubscriptionComponent } from 'src/app/utils';
+import { environment } from 'src/environments/environment';
 
 @Component({
   templateUrl: './landing-page.component.html',
@@ -18,6 +19,13 @@ export class LandingPageComponent extends BaseSubscriptionComponent implements O
     }
     const onsetUrl = this.app.subscribe('reload', () => this.next());
     this.addSubscription(onsetUrl);
+  }
+
+  /**
+   * page title
+   */
+  get title(): string {
+    return environment.info.title;
   }
 
   next() {

@@ -4,6 +4,9 @@
 
 export const environment = {
   production: false,
+  info: {
+    title: 'Nanotate'
+  },
   host: 'http://localhost:4200',
   'an2p-api-host': 'http://localhost:8080/api'
 };
