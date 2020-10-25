@@ -54,7 +54,7 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
       this._form = this.fb.group({
         text: [this.text],
         tags: [this.tags[0], Validators.required],
-        ontologies: [this.ontologies[0], Validators.required]
+        ontologies: [this.ontologies[0]]
       });
       this.onChangeTag();
       this.onChangeOntology(false);
@@ -147,7 +147,7 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
   }
 
   private initOntologiesItems() {
-    this.ontologiesItems = [{ label: 'Select Ontology', value: null }]
+    this.ontologiesItems = [{ label: 'Without Ontology', value: null }]
       .concat(this.nanopubs.config().ontologies.map(ontology => ({ label: ontology, value: ontology })));
   }
 
