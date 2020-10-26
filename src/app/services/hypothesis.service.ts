@@ -10,11 +10,22 @@ declare var hlib;
 
 declare type ServiceEvents = 'init-reload' | 'reload' | 'error-reload';
 
+export const HYPOTHESIS_USER_REGEX_CLEAR = /(?<=acct:)(.*)(?=@)/g
+
+export const clearHypothesisUser = (user) => {
+  if (user) {
+    let author_matcher = user.match(HYPOTHESIS_USER_REGEX_CLEAR);
+    return author_matcher.shift();
+  }
+  return '';
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class HypothesisService {
 
+  public static PUBLIC_GROUP = '__world__';
   private __fullLoaded: boolean = false;
   private __profileData: HypothesisProfile;
   private __subject: Subject<{ e: ServiceEvents, args?: any }> = new Subject();

@@ -1,5 +1,6 @@
 import { Directive, Input, OnDestroy } from '@angular/core';
 import { Annotation } from 'src/app/models';
+import { clearHypothesisUser } from 'src/app/services/hypothesis.service';
 import * as NANOPUBS from '../nanopubs';
 
 /**
@@ -9,7 +10,6 @@ import * as NANOPUBS from '../nanopubs';
  */
 @Directive()
 export class AnnotationPropsComponent {
-
     @Input() annotation: Annotation;
     protected _exact: string;
     protected _settings: { [key: string]: string[] };
@@ -20,6 +20,13 @@ export class AnnotationPropsComponent {
     reload() {
         this._settings = null;
         this._exact = null;
+    }
+
+    /**
+     * retorna el author de la anotacion
+     */
+    get author(): string {
+        return clearHypothesisUser(this.annotation?.user);
     }
 
     /**

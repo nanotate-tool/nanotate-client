@@ -23,9 +23,10 @@
         border-left: 6px solid var.$default-border-color;
         padding-left: 1em;
         margin: 0.5em 0;
-        &:hover {
-            border-left: var.$hover-border-color 6px solid;
-        }
+    }
+
+    &:hover .__exact, .__exact:hover{
+        border-left: var.$hover-border-color 6px solid;
     }
 
     .__text {

@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { Annotation } from 'src/app/models';
+import { HypothesisService } from 'src/app/services';
 import { AnnotationPropsComponent } from 'src/app/utils';
 
 @Component({
@@ -12,11 +13,20 @@ export class AnnotationCardComponent extends AnnotationPropsComponent implements
 
   @Input() annotation: Annotation;
 
-  constructor() {
+  constructor(private hypothesis: HypothesisService) {
     super();
   }
 
   ngOnInit(): void {
+  }
+
+  get group(): string {
+    return this.annotation.group == HypothesisService.PUBLIC_GROUP ? 'Public' :
+      this.hypothesis.profileData?.groups?.find(group => group.id == this.annotation.group)?.name;
+  }
+
+  get groupIcon(): string {
+    return this.annotation.group == HypothesisService.PUBLIC_GROUP ? 'pi pi-globe' : 'pi pi-users';
   }
 
 }

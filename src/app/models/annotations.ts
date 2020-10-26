@@ -66,7 +66,7 @@ export interface Annotation {
     tags: string[];
     text: string;
     uri: string[];
-    user: string[];
+    user: string;
     hidden?: boolean;
     document: { title: string };
     permissions: { read: string[], update: string[], delete: string[] }
