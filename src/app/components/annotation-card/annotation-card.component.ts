@@ -12,6 +12,7 @@ import { AnnotationPropsComponent } from 'src/app/utils';
 export class AnnotationCardComponent extends AnnotationPropsComponent implements OnInit {
 
   @Input() annotation: Annotation;
+  @Input() gtag: string;
 
   constructor(private hypothesis: HypothesisService) {
     super();

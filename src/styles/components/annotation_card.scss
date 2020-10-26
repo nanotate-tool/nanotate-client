@@ -16,6 +16,20 @@
         word-break: break-all;
     }
 
+    .__gtag {
+        display: block;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: var.$primary-color;
+        color: var.$primary-color-contrast;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var.$default-box-shadow;
+    }
+
     .__exact {
         //font-size: 0.7em;
         font-style: italic;
@@ -25,7 +39,8 @@
         margin: 0.5em 0;
     }
 
-    &:hover .__exact, .__exact:hover{
+    &:hover .__exact,
+    .__exact:hover {
         border-left: var.$hover-border-color 6px solid;
     }
 

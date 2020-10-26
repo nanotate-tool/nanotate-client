@@ -176,13 +176,19 @@ export function rescueStepAnnotation(stepAnnotationKey: string, annotations: Ann
         const stepMetadata = getAnnotationMetadata(stepAnnotation);
         const final_annotations = annotations
             .filter(annotation => !isStepAnnotation(annotation))
-            .filter(annotation => {
-                const annotationMetadata = getAnnotationMetadata(annotation);
-                return annotation.id != stepAnnotationKey &&
-                    annotationMetadata.start >= stepMetadata.start && annotationMetadata.end <= stepMetadata.end;
-            });
-
+            .filter(annotation => annotationInsideIn({ ...stepMetadata, id: stepAnnotation.id }, annotation));
         return [stepAnnotation].concat(final_annotations);
     }
     return null;
+}
+
+/**
+ * verifica si la anotacion pasada esta contenida en el metadata pasado
+ * @param parentMetadata metadata de la anotacion contenedora
+ * @param annotation anotacion a verificar
+ */
+export function annotationInsideIn(parentMetadata: { id: string, start: number, end: number }, annotation: Annotation): boolean {
+    const annotationMetadata = getAnnotationMetadata(annotation);
+    return annotation.id != parentMetadata.id &&
+        annotationMetadata.start >= parentMetadata.start && annotationMetadata.end <= parentMetadata.end;
 }

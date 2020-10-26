@@ -14,7 +14,8 @@
         <ng-container *ngIf="!procesing; else loading_template">
             <ng-container *ngIf="!isEmpty; else empty_template">
                 <h3 class="__header_title">Annotations</h3>
-                <a2np-c-annotation-card *ngFor="let annotation of annotations" [annotation]="annotation">
+                <a2np-c-annotation-card *ngFor="let annotation of annotations" [annotation]="annotation"
+                    [gtag]="annotation['n_group']">
                     <ng-container footer>
                         <a2np-c-annotation-actions-bar [annotation]="annotation"
                             (onAction)="proxyActionBarEvent($event)"></a2np-c-annotation-actions-bar>

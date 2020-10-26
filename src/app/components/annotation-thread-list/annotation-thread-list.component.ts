@@ -65,6 +65,7 @@ export class AnnotationThreadListComponent implements OnInit, OnChanges {
       this.hypothesisService.search(this.query)
         .then(response => {
           this.annotations = response;
+          this.group();
           this.el.markForCheck();
         })
         .finally(() => { this.procesing = false; });
@@ -85,6 +86,28 @@ export class AnnotationThreadListComponent implements OnInit, OnChanges {
       default: {
         this.onAction.emit(proxyed_event);
       }
+    }
+  }
+
+  private group() {
+    if (this.annotations) {
+      const steps = this.annotations.filter(annotation => NANOPUBS.isStepAnnotation(annotation)).reduce((acc, annotation, index) => {
+        const group = `N${index + 1}`;
+        acc[group] = {
+          metadata: { ...NANOPUBS.getAnnotationMetadata(annotation), id: annotation.id },
+          step: annotation
+        }
+        annotation['n_group'] = group;
+        return acc;
+      }, {});
+      this.annotations.forEach(annotation => {
+        for (const group in steps) {
+          const step = steps[group];
+          if (NANOPUBS.annotationInsideIn(step.metadata, annotation)) {
+            annotation['n_group'] = group;
+          }
+        }
+      })
     }
   }
 
