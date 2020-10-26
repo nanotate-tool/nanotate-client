@@ -153,7 +153,7 @@ export function formatAnnotation(annotation) {
             suffix: textQuoteSelector?.['suffix'],
             start: textPositionSelector?.['start'],
             end: textPositionSelector?.['end'],
-            tags: annotation.tags,
+            tags: annotation.tags.filter(tag => !isOntologyTag(tag)),
             group: annotation.group,
             ontologies: annotation.tags.filter(isOntologyTag).map(tag => decodeOntologyTag(tag, false)),
             settings: settings
