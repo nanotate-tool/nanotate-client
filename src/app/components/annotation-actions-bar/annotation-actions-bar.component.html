@@ -1,0 +1,9 @@
+<div class="annotation-actions-bar">
+    <button pButton *ngIf="isStepAnnotation" [disabled]="procesing" class="p-button-outlined p-button-text"
+        label="Nanopub" icon="pi pi-file-o" (click)="nanopub(annotation)"></button>
+    <button pButton *ngIf="canPerform('edit')" [disabled]="procesing" class="p-button-outlined p-button-text"
+        label="Edit" icon="pi pi-pencil" (click)="edit(annotation)"></button>
+    <button pButton *ngIf="canPerform('delete')" [disabled]="procesing"
+        class="p-button-outline p-button-text p-button-danger" label="Delete" icon="pi pi-trash"
+        (click)="delete(annotation)"></button>
+</div>

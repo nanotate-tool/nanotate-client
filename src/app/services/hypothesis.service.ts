@@ -184,6 +184,25 @@ export class HypothesisService {
   }
 
   /**
+   * realiza el proceso de eliminacion de la anotacion pasada
+   * @param annotation annotation a eliminar
+   */
+  deleteAnnotation(annotation: Annotation): Promise<any> {
+    return this.checkHypothesisUser(
+      () => {
+        const user = this.hypothesis_user;
+        return hlib.deleteAnnotation(annotation.id, user.token)
+          .then(response => {
+            if (response.response) {
+              response.response = JSON.parse(response.response);
+            }
+            return response.response;
+          });
+      }
+    );
+  }
+
+  /**
    * realiza la busqueda de los datos de perfil del usuario 
    * de hypothesis de la instancia actual
    */

@@ -25,3 +25,5 @@ export * from './loading-panel/loading-panel.component';
 export * from './loading-panel/loading-panel.module';
 export * from './nanopub-list/nanopub-list.component';
 export * from './nanopub-list/nanopub-list.module';
+export * from './annotation-actions-bar/annotation-actions-bar.component';
+export * from './annotation-actions-bar/annotation-actions-bar.module';

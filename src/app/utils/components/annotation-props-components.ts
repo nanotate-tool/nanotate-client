@@ -89,4 +89,17 @@ export class AnnotationPropsComponent {
         this.settings[key] = value;
     }
 
+    /**
+     * determina si el usuario tiene permisos para cierta accion
+     * true si tiene permisos false de lo contrario
+     * @param action accion a verificar el permiso
+     * @param user identificador del usuario que quiere realizar la accion
+     */
+    havePermissionFor(action: 'delete' | 'update', user: string): boolean {
+        if (user && this.annotation?.permissions && this.annotation.permissions[action]) {
+            return this.annotation.permissions[action].includes(user.trim());
+        }
+        return false;
+    }
+
 }
