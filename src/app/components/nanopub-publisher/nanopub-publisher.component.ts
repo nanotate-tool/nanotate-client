@@ -68,7 +68,6 @@ export class NanopubPublisherComponent implements OnInit, OnChanges {
       this.previewNanopub(),
     ]).then((a) => this.calculeIfhasDiff())
       .then(() => {
-        console.log(this.hasDiff);
         this.buildMenuBarModel();
       }).finally(() => {
         this.procesing = false;

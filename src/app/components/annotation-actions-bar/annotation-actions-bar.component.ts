@@ -24,7 +24,6 @@ export class AnnotationActionsBarComponent extends AnnotationPropsComponent impl
   }
 
   ngOnInit(): void {
-    console.log(this.annotation, this.hypothesisService.profileData.userid);
   }
 
   edit(annotation: Annotation) {
