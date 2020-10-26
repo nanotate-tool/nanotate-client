@@ -5,6 +5,7 @@ import { AnnotationCardModule } from '../annotation-card/annotation-card.module'
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from "primeng/dropdown";
 import { FormsModule } from '@angular/forms';
+import { AnnotationActionsBarModule } from '../annotation-actions-bar/annotation-actions-bar.module';
 
 @NgModule({
   declarations: [AnnotationThreadListComponent],
@@ -13,7 +14,8 @@ import { FormsModule } from '@angular/forms';
     AnnotationCardModule,
     ButtonModule,
     FormsModule,
-    DropdownModule
+    DropdownModule,
+    AnnotationActionsBarModule
   ],
   exports: [AnnotationThreadListComponent]
 })

@@ -16,10 +16,8 @@
                 <h3 class="__header_title">Annotations</h3>
                 <a2np-c-annotation-card *ngFor="let annotation of annotations" [annotation]="annotation">
                     <ng-container footer>
-                        <button *ngIf="canShowNanopub(annotation)" pButton class="p-button-outlined p-button-text"
-                            label="Nanopub" icon="pi pi-file-o" (click)="nanopub(annotation)"></button>
-                        <button pButton class="p-button-outlined p-button-text" label="Edit" icon="pi pi-pencil"
-                            (click)="edit(annotation)"></button>
+                        <a2np-c-annotation-actions-bar [annotation]="annotation"
+                            (onAction)="proxyActionBarEvent($event)"></a2np-c-annotation-actions-bar>
                     </ng-container>
                 </a2np-c-annotation-card>
             </ng-container>

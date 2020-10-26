@@ -71,30 +71,21 @@ export class AnnotationThreadListComponent implements OnInit, OnChanges {
     }
   }
 
-  /**
-   * determina si se puede presentar el boton de nanopublicaciones
-   * @param annotation annotacion
-   */
-  canShowNanopub(annotation: Annotation) {
-    return annotation && NANOPUBS.isStepAnnotation(annotation);
-  }
-
-  edit(annotation: Annotation) {
-    this.onAction.emit({
-      action: 'edit',
-      annotation: annotation
-    });
-  }
-
-  nanopub(annotation: Annotation) {
-    this.onAction.emit({
-      action: 'nanopub',
-      annotation: annotation,
+  proxyActionBarEvent(event) {
+    const proxyed_event = {
+      ...event,
       data: {
-        step: annotation,
-        annotations: this.annotations
+        annotations: this.annotations, ...event.data
       }
-    });
+    };
+    switch (event.action) {
+      case 'delete': {
+        this.search();
+      } break;
+      default: {
+        this.onAction.emit(proxyed_event);
+      }
+    }
   }
 
 }
