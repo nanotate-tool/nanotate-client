@@ -11,10 +11,11 @@
     </div>
     <div class="p-field">
         <label>Ontology</label>
-        <p-dropdown formControlName="ontologies" [options]="ontologiesItems" (onChange)="onChangeOntology()">
-        </p-dropdown>
+        <p-multiSelect [filter]="false" [maxSelectedLabels]="8" selectedItemsLabel="{0} Ontologies Selected"
+            defaultLabel="Without Ontology" [options]="ontologiesItems" formControlName="ontologies"
+            (onChange)="onChangeOntology()"></p-multiSelect>
     </div>
-    <div *ngIf="canShowAnnotationSeachs" class="p-field p-p-2 _annotations_ontology_wrapper">
+    <div *ngIf="canShowAnnotationSearch" class="p-field p-p-2 _annotations_ontology_wrapper">
         <div class="p-d-flex p-jc-between p-ai-center">
             <h4 class="p-my-2">Annotations for <span class="p-tag">{{form.controls.ontologies.value}}</span></h4>
             <div *ngIf="procesingStates.fetchingBioAnnotations; else bio_annotations_refresh">
@@ -30,8 +31,8 @@
             </ng-container>
         </ng-container>
         <ng-template #bio_annotations_refresh>
-            <button pButton icon="pi pi-refresh" class="p-button-text p-button-rounded"
-                (click)="onChangeOntology()" type="button"></button>
+            <button pButton icon="pi pi-refresh" class="p-button-text p-button-rounded" (click)="onChangeOntology()"
+                type="button"></button>
         </ng-template>
         <ng-template #bio_annotations_empty>
             <div class="p-p-1">

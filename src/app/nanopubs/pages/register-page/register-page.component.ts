@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnnotationEditorComponent, AnnotationThreadListComponent } from 'src/app/components';
 import { Annotation } from 'src/app/models';
-import { AppService, HypothesisService } from 'src/app/services';
-import { BaseSubscriptionComponent } from 'src/app/utils';
+import { AppService, HypothesisService, NanopubsService } from 'src/app/services';
+import { BaseSubscriptionComponent, NANOPUBS } from 'src/app/utils';
 
 @Component({
   templateUrl: './register-page.component.html',
@@ -35,7 +35,7 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
   private uri_snapshot: string;
 
   constructor(private activeRoute: ActivatedRoute, private hypothesisService: HypothesisService,
-    public app: AppService, private router: Router) {
+    public app: AppService, private router: Router, private nanopubs: NanopubsService) {
     super();
   }
 
@@ -94,6 +94,7 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
     if (params.data) {
       const parseData = JSON.parse(params.data);
       const annotation = this.hypothesisService.createAnnotationPayload(parseData);
+      annotation.tags = this.nanopubs.config().ontologies.map(ontology => NANOPUBS.encodeOntologyTag(ontology)).concat(annotation.tags || []);
       this.handleAnnotation({ action: 'new', annotation: annotation });
       this.router.navigate(['.'], { relativeTo: this.activeRoute });
     } else if (!this.annotation) {

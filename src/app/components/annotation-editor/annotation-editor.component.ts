@@ -54,7 +54,7 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
       this._form = this.fb.group({
         text: [this.text],
         tags: [this.tags[0], Validators.required],
-        ontologies: [this.ontologies[0]]
+        ontologies: [this.ontologies]
       });
       this.onChangeTag();
       this.onChangeOntology(false);
@@ -65,11 +65,11 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
   /**
    * determina si se muestra el buscador de anotaciones para la ontologia
    */
-  get canShowAnnotationSeachs(): boolean {
+  get canShowAnnotationSearch(): boolean {
     const tags = this.form.controls.tags.value;
     const ontologies = this.form.controls.ontologies.value
-    return (!NANOPUBS.isStepAnnotation({ tags: [tags] }) && tags
-      && ontologies) && true;
+    return (!NANOPUBS.isStepAnnotation({ tags: [tags] })
+      && ontologies && ontologies.length > 0) && true;
   }
 
   /**
@@ -79,8 +79,8 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
   private get rawAnnotation(): Annotation {
     const formProps = this.form.getRawValue();
     var tags = [formProps.tags];
-    if (formProps.ontologies) {
-      tags.push(NANOPUBS.encodeOntologyTag(formProps.ontologies));
+    if (formProps.ontologies && formProps.ontologies.length > 0) {
+      tags.push(formProps.ontologies.map(ontology => NANOPUBS.encodeOntologyTag(ontology)));
     }
     if (this.selectedBioAnnotations) {
       this.setSetting('bio_annotations', this.selectedBioAnnotations.map(annotation => annotation.id));
@@ -135,19 +135,23 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
    */
   onChangeOntology(_new: boolean = true) {
     const ontologies = this.form.controls.ontologies.value;
-    if (ontologies) {
+    if (ontologies && ontologies.length > 0) {
       this.procesingStates.fetchingBioAnnotations = true;
-      this.nanopubs.bioAnnotations([ontologies], this.exact).then(annotations => {
+      this.el.markForCheck();
+      this.nanopubs.bioAnnotations(ontologies, this.exact).then(annotations => {
         this.bioAnnotations = annotations;
         this.selectedBioAnnotations = _new ? this.bioAnnotations : this.bioAnnotations.
           filter(annotation => !this.settings.bio_annotations || this.settings.bio_annotations.includes(annotation.id));
         this.el.markForCheck();
       }).finally(() => this.procesingStates.fetchingBioAnnotations = false);
+    } else {
+      this.bioAnnotations = null;
+      this.el.markForCheck();
     }
   }
 
   private initOntologiesItems() {
-    this.ontologiesItems = [{ label: 'Without Ontology', value: null }]
+    this.ontologiesItems = []
       .concat(this.nanopubs.config().ontologies.map(ontology => ({ label: ontology, value: ontology })));
   }
 

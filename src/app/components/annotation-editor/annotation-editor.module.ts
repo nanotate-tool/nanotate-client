@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from "primeng/dropdown";
 import { ButtonModule } from "primeng/button";
 import { InputTextareaModule } from "primeng/inputtextarea";
+import { MultiSelectModule } from "primeng/multiselect";
 import { BioAnnotationListModule } from '../bio-annotation-list/bio-annotation-list.module';
 
 @NgModule({
@@ -18,7 +19,8 @@ import { BioAnnotationListModule } from '../bio-annotation-list/bio-annotation-l
     DropdownModule,
     ButtonModule,
     InputTextareaModule,
-    BioAnnotationListModule
+    BioAnnotationListModule,
+    MultiSelectModule
   ],
   exports: [AnnotationEditorComponent]
 })
