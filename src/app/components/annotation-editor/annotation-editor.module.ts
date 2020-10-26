@@ -8,6 +8,7 @@ import { ButtonModule } from "primeng/button";
 import { InputTextareaModule } from "primeng/inputtextarea";
 import { MultiSelectModule } from "primeng/multiselect";
 import { BioAnnotationListModule } from '../bio-annotation-list/bio-annotation-list.module';
+import { LoadingPanelModule } from '../loading-panel/loading-panel.module';
 
 @NgModule({
   declarations: [AnnotationEditorComponent],
@@ -20,7 +21,8 @@ import { BioAnnotationListModule } from '../bio-annotation-list/bio-annotation-l
     ButtonModule,
     InputTextareaModule,
     BioAnnotationListModule,
-    MultiSelectModule
+    MultiSelectModule,
+    LoadingPanelModule
   ],
   exports: [AnnotationEditorComponent]
 })

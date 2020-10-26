@@ -80,7 +80,7 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
     const formProps = this.form.getRawValue();
     var tags = [formProps.tags];
     if (formProps.ontologies && formProps.ontologies.length > 0) {
-      tags.push(formProps.ontologies.map(ontology => NANOPUBS.encodeOntologyTag(ontology)));
+      tags = tags.concat(formProps.ontologies.map(ontology => NANOPUBS.encodeOntologyTag(ontology)));
     }
     if (this.selectedBioAnnotations) {
       this.setSetting('bio_annotations', this.selectedBioAnnotations.map(annotation => annotation.id));
@@ -100,17 +100,26 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
    */
   publish() {
     if (this.form.valid) {
+      this.procesingStates.saving = true;
       const annotation = this.rawAnnotation;
       const _operation = annotation.id ? this.hypothesisService.updateAnnotation(annotation) : this.hypothesisService.postAnnotation(annotation);
       _operation.then(response => {
-        if (response?.response) {
-          this.annotation = response.response;
-          this.onUpdate.emit(response.response);
-          this.reload();
-          this.messageService.add({ severity: 'success', summary: 'Ok on publishing' })
-        } else {
-          this.messageService.add({ severity: 'error', summary: 'Error on publishing', detail: response?.reason })
-        }
+        return new Promise((resolve) => {
+          if (response?.response) {
+            this.annotation = response.response;
+            setTimeout(() => {
+              this.onUpdate.emit(response.response);
+              this.reload();
+              this.messageService.add({ severity: 'success', summary: 'Ok on publishing' })
+              resolve(response.response)
+            }, 500);
+          } else {
+            this.messageService.add({ severity: 'error', summary: 'Error on publishing', detail: response?.reason })
+          }
+          return response;
+        });
+      }).finally(() => {
+        this.procesingStates.saving = false;
       });
     }
   }

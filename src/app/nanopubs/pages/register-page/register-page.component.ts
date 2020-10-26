@@ -57,9 +57,10 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
   /**
    * lanza el evento de actualizacion de las anotaciones
    * de la pagina
+   * @param forceHome true para forzar la ida al home false de lo contrario
    */
-  refreshAnnotations() {
-    if (this.uri_snapshot != this.app.siteData.url) {
+  refreshAnnotations(forceHome: boolean = false) {
+    if (forceHome || (this.uri_snapshot != this.app.siteData.url)) {
       this.perspective = 'home';
       this.uri_snapshot = this.app.siteData.url;
     }
