@@ -53,7 +53,7 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
     if (!this._form) {
       this._form = this.fb.group({
         text: [this.text],
-        tags: [this.tags[0], Validators.required],
+        tags: [this.tags, Validators.required],
         ontologies: [this.ontologies]
       });
       this.onChangeTag();
@@ -68,7 +68,7 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
   get canShowAnnotationSearch(): boolean {
     const tags = this.form.controls.tags.value;
     const ontologies = this.form.controls.ontologies.value
-    return (!NANOPUBS.isStepAnnotation({ tags: [tags] })
+    return (!NANOPUBS.isStepAnnotation({ tags: tags })
       && ontologies && ontologies.length > 0) && true;
   }
 
@@ -78,7 +78,7 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
    */
   private get rawAnnotation(): Annotation {
     const formProps = this.form.getRawValue();
-    var tags = [formProps.tags];
+    var tags = formProps.tags;
     if (formProps.ontologies && formProps.ontologies.length > 0) {
       tags = tags.concat(formProps.ontologies.map(ontology => NANOPUBS.encodeOntologyTag(ontology)));
     }
@@ -129,11 +129,15 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
    */
   onChangeTag() {
     setTimeout(() => {
-      if (NANOPUBS.isStepAnnotation({ tags: [this.form.controls.tags.value] })) {
+      if (NANOPUBS.isStepAnnotation({ tags: this.form.controls.tags.value })) {
+        this.form.controls.tags.setValue([NANOPUBS.STEP_TAG]);
         this.form.controls.ontologies.setValue(null);
         this.form.controls.ontologies.disable();
+        this.initloadTagsItems(true);
       } else {
+        this.form.controls.ontologies.setValue(this.ontologies);
         this.form.controls.ontologies.enable();
+        this.initloadTagsItems(false);
       }
       this.el.markForCheck();
     }, 1);
@@ -160,13 +164,15 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
   }
 
   private initOntologiesItems() {
-    this.ontologiesItems = []
-      .concat(this.nanopubs.config().ontologies.map(ontology => ({ label: ontology, value: ontology })));
+    this.ontologiesItems = this.nanopubs.config().ontologies.map(
+      ontology => ({ label: ontology, value: ontology })
+    );
   }
 
-  private initloadTagsItems() {
-    this.tagsItems = [{ label: 'Select Tag', value: null }]
-      .concat(this.nanopubs.config().tags.map(tag => ({ label: tag, value: tag })));
+  private initloadTagsItems(disable: boolean = false) {
+    this.tagsItems = this.nanopubs.config().tags.map(
+      tag => ({ label: tag, value: tag, disabled: tag != NANOPUBS.STEP_TAG ? disable : false })
+    );
   }
 
 }

@@ -2,6 +2,7 @@
 
 import { Annotation } from '../models';
 
+export const STEP_TAG = 'step';
 // custom settings vars for annotations
 const SETTINGS_STR_START: string = '===SETTINGS===\n';
 const SETTINGS_STR_END: string = '\n===END SETTINGS===\n';
@@ -103,7 +104,7 @@ export function isOntologyTag(tag) {
  * @param annotation 
  */
 export function isStepAnnotation(annotation: { tags: string[] }) {
-    return annotation && annotation.tags.includes('step');
+    return annotation && annotation.tags.includes(STEP_TAG);
 }
 
 /**

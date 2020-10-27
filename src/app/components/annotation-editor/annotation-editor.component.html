@@ -7,8 +7,9 @@
         </div>
         <div class="p-field">
             <label>Tag</label>
-            <p-dropdown formControlName="tags" [options]="tagsItems" (onChange)="onChangeTag()">
-            </p-dropdown>
+            <p-multiSelect [filter]="false" [maxSelectedLabels]="8" selectedItemsLabel="{0} Tags Selected"
+                defaultLabel="Select Tag" [options]="tagsItems" formControlName="tags"
+                (onChange)="onChangeTag()" [showHeader]="false" ></p-multiSelect>
         </div>
         <div class="p-field">
             <label>Ontology</label>
