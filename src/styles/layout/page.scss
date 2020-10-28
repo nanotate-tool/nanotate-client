@@ -20,6 +20,10 @@ a {
     }
 }
 
+.clickable {
+    cursor: pointer !important;
+}
+
 .page-body {
     max-width: var.$max-width-page;
     margin: auto;

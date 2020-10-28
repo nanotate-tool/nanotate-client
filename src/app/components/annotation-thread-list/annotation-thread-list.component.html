@@ -14,8 +14,9 @@
         <ng-container *ngIf="!procesing; else loading_template">
             <ng-container *ngIf="!isEmpty; else empty_template">
                 <h3 class="__header_title">Annotations</h3>
-                <a2np-c-annotation-card *ngFor="let annotation of annotations" [annotation]="annotation"
-                    [gtag]="annotation['n_group']">
+                <ng-container *ngIf="!isFiltersEmpty" [ngTemplateOutlet]="filters_comp"></ng-container>
+                <a2np-c-annotation-card *ngFor="let annotation of filteredAnnotations" [annotation]="annotation"
+                    [gtag]="annotation['n_group']" (onGtagClick)="filter({'stepGroup':annotation['n_group']})">
                     <ng-container footer>
                         <a2np-c-annotation-actions-bar [annotation]="annotation"
                             (onAction)="proxyActionBarEvent($event)"></a2np-c-annotation-actions-bar>
@@ -39,5 +40,31 @@
             <i class="pi pi-ban"></i>
             <span class="p-mx-1">No annotations found in site</span>
         </h4>
+    </div>
+</ng-template>
+
+<ng-template #filters_comp>
+    <div class="__filters_wrapper p-mb-2">
+        <h3 class="p-my-1">
+            <li class="pi pi-sliders-h"></li>
+            <span class="p-px-1">Filters</span>
+        </h3>
+        <ul class="unstyle">
+            <ng-container *ngFor="let field of filtersSchema">
+                <ng-container *ngIf="filters[field.key]">
+                    <li class="p-py-2 p-d-flex">
+                        <label>
+                            {{field.label}}: <span class="p-ml-2 p-text-bold">{{filters[field.key]}}</span>
+                        </label>
+                        <div class="p-ml-auto">
+                            <p-button type="button" icon="pi pi-times"
+                                styleClass="p-button-sm p-button-rounded p-button-danger"
+                                (onClick)="filterAt(field.key,null)">
+                            </p-button>
+                        </div>
+                    </li>
+                </ng-container>
+            </ng-container>
+        </ul>
     </div>
 </ng-template>

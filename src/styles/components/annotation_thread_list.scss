@@ -12,7 +12,7 @@
         margin-bottom: 0.5em;
 
         &_title {
-            margin: .5em 0;
+            margin: 0.5em 0;
         }
 
         &_logo {
@@ -26,6 +26,11 @@
         ._main_bar {
             flex: 1;
         }
+    }
+
+    .__filters_wrapper {
+        border-left: 0.2em solid var.$primary-color;
+        padding-left: 0.5em;
     }
 
     .annotation-card {

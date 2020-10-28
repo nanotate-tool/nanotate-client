@@ -1,0 +1,11 @@
+.p-button {
+    &.p-button-sm {
+        font-size: 0.6em !important;
+        padding: 0.4375em 0.875em !important;
+        height: 2.357em !important;
+        width: 2.357em !important;
+        .p-button-icon {
+            font-size: 0.875em !important;
+        }
+    }
+}

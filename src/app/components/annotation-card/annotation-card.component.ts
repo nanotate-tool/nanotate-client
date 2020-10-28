@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { Annotation } from 'src/app/models';
 import { HypothesisService } from 'src/app/services';
 import { AnnotationPropsComponent } from 'src/app/utils';
@@ -13,6 +13,7 @@ export class AnnotationCardComponent extends AnnotationPropsComponent implements
 
   @Input() annotation: Annotation;
   @Input() gtag: string;
+  @Output() onGtagClick: EventEmitter<Annotation> = new EventEmitter();
 
   constructor(private hypothesis: HypothesisService) {
     super();
