@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { Nanopublication } from 'src/app/models';
+import { clearHypothesisUser } from 'src/app/services/hypothesis.service';
 
 @Component({
   selector: 'a2np-c-nanopub-card',
@@ -15,6 +16,10 @@ export class NanopubCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  get author() {
+    return this.nanopub ? clearHypothesisUser(this.nanopub.author) : '';
   }
 
 }

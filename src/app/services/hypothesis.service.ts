@@ -12,10 +12,10 @@ declare type ServiceEvents = 'init-reload' | 'reload' | 'error-reload';
 
 export const HYPOTHESIS_USER_REGEX_CLEAR = /(?<=acct:)(.*)(?=@)/g
 
-export const clearHypothesisUser = (user) => {
+export const clearHypothesisUser = (user:string) => {
   if (user) {
     let author_matcher = user.match(HYPOTHESIS_USER_REGEX_CLEAR);
-    return author_matcher.shift();
+    return author_matcher ? author_matcher.shift() : user;
   }
   return '';
 }
