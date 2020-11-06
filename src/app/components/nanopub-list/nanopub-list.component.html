@@ -9,8 +9,11 @@
     <div class="">
         <a2np-c-nanopub-card *ngFor="let nanopub of nanopubs" [nanopub]="nanopub">
             <div class="p-mt-2 p-text-center">
-                <p-button styleClass="p-button-outlined p-button-text" icon="pi pi-file-o" label="Nanopub"
-                    (onClick)="showRdfOfNanopub(nanopub.rdf_raw)"></p-button>
+                <p-button *ngIf="!nanopub?.publication_info" styleClass="p-button-outlined p-button-text"
+                    icon="pi pi-file-o" label="Nanopub" (onClick)="showRdfOfNanopub(nanopub.rdf_raw)"></p-button>
+                <a *ngIf="nanopub?.publication_info" pButton [href]="nanopub.publication_info.canonical_url"
+                    class="p-button p-button-link p-button-outlined p-button-text undecorated" target="_blank"
+                    icon="pi pi-file-o" label="Nanopub"></a>
             </div>
         </a2np-c-nanopub-card>
     </div>

@@ -34,4 +34,15 @@ export interface Nanopublication {
     updated_at: Date;
     protocol: string;
     rdf_raw: any;
+    publication_info: PublicationInfo
+}
+
+/**
+ * contiene la informacion de la publicacion remota
+ */
+export interface PublicationInfo {
+    nanopub_uri: string
+    artifact_code: string
+    published_at: string
+    canonical_url: string
 }
