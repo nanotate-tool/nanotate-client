@@ -71,6 +71,15 @@ export class NanopubsService {
     return this.httpClient.post(this.apiUrl('nanopub/rgs'), formatedAnnotaions).toPromise();
   }
 
+  /**
+   * realiza la eliminacion de la nanopublicacion pasada
+   * @param nanopub nanopublicacion a eliminar
+   */
+  delete(nanopub: Nanopublication) {
+    return this.httpClient.delete(this.apiUrl(`nanopub/${nanopub.id}`)).toPromise()
+      .then(response => <any>response);
+  }
+
   previewOf(annotationKey: string, thread: { annotations: Annotation[] }) {
     //const thread = null; // useStore(store => store.threadState());
     const stepAnnotation = thread.annotations.find(annotation => annotation.id === annotationKey && annotation.tags.includes('step'));

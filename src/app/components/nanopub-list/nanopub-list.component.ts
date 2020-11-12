@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Optional } from '@angular/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { NanopubHtml, Nanopublication } from 'src/app/models';
 import { AppService, NanopubsService } from 'src/app/services';
@@ -21,8 +22,8 @@ export class NanopubListComponent extends BaseSubscriptionComponent implements O
   procesing: boolean = false;
   procesingMessage: string = "Searching...";
 
-  constructor(private app: AppService, private nanopubsService: NanopubsService,
-    public dialogService: DialogService, private el: ChangeDetectorRef) {
+  constructor(private app: AppService, private nanopubsService: NanopubsService, private messageService: MessageService,
+    public dialogService: DialogService, private el: ChangeDetectorRef, @Optional() private confirmationService: ConfirmationService) {
     super();
   }
 
@@ -83,6 +84,42 @@ export class NanopubListComponent extends BaseSubscriptionComponent implements O
       closeOnEscape: false,
       data: {
         nanopub: nanopub
+      }
+    });
+  }
+
+  deleteNanopub(nanopub: Nanopublication) {
+    return this.confirm().then(_continue => {
+      if (_continue) {
+        return this.nanopubsService.delete(nanopub)
+          .then(response => {
+            if (response.status == 'ok') {
+              this.reload()
+              this.messageService.add({ severity: 'success', summary: 'Ok on delete nanoPublication' })
+            } else {
+              this.messageService.add({ severity: 'error', summary: 'Error on delete nanoPublication', detail: response.message })
+            }
+            return response;
+          });
+      }
+      return false;
+    });
+  }
+
+  confirm(message: string = 'Are you sure that you want delete this nano publication?'): Promise<boolean> {
+    return new Promise((resolve) => {
+      if (this.confirmationService) {
+        this.confirmationService.confirm({
+          message: message,
+          accept: () => {
+            resolve(true);
+          },
+          reject: () => {
+            resolve(false);
+          }
+        });
+      } else {
+        resolve(true)
       }
     });
   }
