@@ -8,7 +8,7 @@ export const environment = {
     title: 'Nanotate'
   },
   host: 'http://localhost:4200',
-  'an2p-api-host': 'http://localhost:8080/api'
+  'an2p-api-host': 'http://localhost:8080'
 };
 
 /*

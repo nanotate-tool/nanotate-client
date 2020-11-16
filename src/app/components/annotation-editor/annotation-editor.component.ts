@@ -164,15 +164,22 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
   }
 
   private initOntologiesItems() {
-    this.ontologiesItems = this.nanopubs.config().ontologies.map(
-      ontology => ({ label: ontology, value: ontology })
-    );
+    this.nanopubs.settings.then(settings => {
+      this.ontologiesItems = settings.ontologies.map(
+        ontology => ({ label: ontology, value: ontology })
+      );
+      this.el.markForCheck();
+    });
   }
 
   private initloadTagsItems(disable: boolean = false) {
-    this.tagsItems = this.nanopubs.config().tags.map(
-      tag => ({ label: tag, value: tag, disabled: tag != NANOPUBS.STEP_TAG ? disable : false })
-    );
+    this.nanopubs.settings.then(settings => {
+      this.tagsItems = settings.tags.map(
+        tag => ({ label: tag, value: tag, disabled: tag != NANOPUBS.STEP_TAG ? disable : false })
+      );
+      this.el.markForCheck();
+    });
+    
   }
 
 }

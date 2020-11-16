@@ -26,7 +26,7 @@ export class ProtocolsService {
    * @param {string} url url a consultar basada en la api
    */
   protected apiUrl(url): string {
-    return `${environment["an2p-api-host"]}/${url}`;
+    return `${environment["an2p-api-host"]}/api/${url}`;
   }
 
 }

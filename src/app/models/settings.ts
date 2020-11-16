@@ -1,17 +1,21 @@
 /**
  * contiene las configuraciones para la api de nanopublicaciones
  */
-export interface NanoPubApiConfig{
+export interface NanoPubApiConfig {
     /**
      *  url de la api
      */
-    apiUrl:string;
+    apiUrl?: string;
     /**
      *  grupo de ontologias permitidas
      */
-    ontologies:string[];
+    ontologies: string[];
     /**
      * tags permitidas 
      */
-    tags:string[];
+    tags: string[];
+    /**
+     * version de prueba
+     */
+    test?: boolean;
 }

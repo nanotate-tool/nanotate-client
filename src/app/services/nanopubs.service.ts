@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Annotation, BioAnnotation, Nanopublication } from '../models';
 import { NanoPubApiConfig } from '../models/settings';
@@ -11,26 +12,34 @@ import { NANOPUBS } from '../utils';
   providedIn: 'root'
 })
 export class NanopubsService {
-  /**
-   * default config
-   */
-  private static default_config: NanoPubApiConfig = {
-    apiUrl: environment["an2p-api-host"],
-    ontologies: ['ERO', 'SP', 'CHEBI', 'OBI', 'BAO', 'NCBITAXON', 'UBERON', 'EFO'],
-    tags: ['step', 'sample', 'reagent', 'equipment', 'input', 'output'],
-  }
+  
   /**
    * default rdf format in app
    */
   private static default_rdf_format: string = 'json-html';
+  private _settings: NanoPubApiConfig;
+  private _settigs_puller: Observable<any>;
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
   /**
-   * configuracion de las nanopublicaciones
+   * getting api settings
    */
-  config(): NanoPubApiConfig {
-    return NanopubsService.default_config;
+  get settings(): Promise<NanoPubApiConfig> {
+    if (this._settings) {
+      return Promise.resolve(this._settings);
+    } else {
+      if (!this._settigs_puller)
+        this._settigs_puller = this.httpClient.get(this.apiUrl('settings', false));
+
+      return new Promise((resolve, reject) => {
+        this._settigs_puller.subscribe((response) => {
+          this._settings = response;
+          resolve(response);
+        }, reject);
+      });
+    }
   }
 
   /**
@@ -122,8 +131,8 @@ export class NanopubsService {
      * genera una url basada en la url de acceso a la api
      * @param {string} url url a consultar basada en la api
      */
-  protected apiUrl(url): string {
-    return `${this.config().apiUrl}/${url}`;
+  protected apiUrl(url, with_api: boolean = true): string {
+    return `${environment["an2p-api-host"]}/${with_api ? 'api/' : ''}${url}`;
   }
 
   protected parseNanopublication(nanopub: any): Nanopublication {

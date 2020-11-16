@@ -94,10 +94,12 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
   private handleQueryParams(params) {
     if (params.data) {
       const parseData = JSON.parse(params.data);
-      const annotation = this.hypothesisService.createAnnotationPayload(parseData);
-      annotation.tags = this.nanopubs.config().ontologies.map(ontology => NANOPUBS.encodeOntologyTag(ontology)).concat(annotation.tags || []);
-      this.handleAnnotation({ action: 'new', annotation: annotation });
-      this.router.navigate(['.'], { relativeTo: this.activeRoute });
+      this.nanopubs.settings.then(settings => {
+        const annotation = this.hypothesisService.createAnnotationPayload(parseData);
+        annotation.tags = settings.ontologies.map(ontology => NANOPUBS.encodeOntologyTag(ontology)).concat(annotation.tags || []);
+        this.handleAnnotation({ action: 'new', annotation: annotation });
+        this.router.navigate(['.'], { relativeTo: this.activeRoute });
+      });
     } else if (!this.annotation) {
       this.perspective = 'home';
     }
