@@ -43,6 +43,4 @@ export interface Nanopublication {
 export interface PublicationInfo {
     nanopub_uri: string
     artifact_code: string
-    published_at: string
-    canonical_url: string
 }
