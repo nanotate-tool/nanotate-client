@@ -138,7 +138,7 @@ export class AppService {
    * las variables pasadas
    * @param field campo a consultar
    */
-  env(field: 'host' | 'an2p-api-host') {
+  env(field: 'host' | 'an2p-api-host' | 'production') {
     return environment[field];
   }
 

@@ -8,15 +8,7 @@
     </div>
     <div class="">
         <a2np-c-nanopub-card *ngFor="let nanopub of nanopubs" [nanopub]="nanopub">
-            <div class="p-mt-2 p-text-center">
-                <p-button *ngIf="!nanopub?.publication_info" styleClass="p-button-outlined p-button-text"
-                    icon="pi pi-file-o" label="Nanopub" (onClick)="showRdfOfNanopub(nanopub.rdf_raw)"></p-button>
-                <a *ngIf="nanopub?.publication_info" pButton [href]="nanopub.publication_info.nanopub_uri"
-                    class="p-button p-button-link p-button-outlined p-button-text undecorated" target="_blank"
-                    icon="pi pi-file-o" label="Nanopub"></a>
-                <p-button styleClass="p-button-outlined p-button-text p-button-danger"
-                    icon="pi pi-trash" label="Delete" (onClick)="deleteNanopub(nanopub)"></p-button>    
-            </div>
+            <a2np-c-nanopub-action-bar [nanopub]="nanopub" (onNeedReload)="reload()"></a2np-c-nanopub-action-bar>
         </a2np-c-nanopub-card>
     </div>
 </ng-container>

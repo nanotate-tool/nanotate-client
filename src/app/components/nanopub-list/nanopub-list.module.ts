@@ -4,6 +4,7 @@ import { NanopubListComponent } from './nanopub-list.component';
 import { NanopubCardModule } from '../nanopub-card/nanopub-card.module';
 import { ButtonModule } from "primeng/button";
 import { LoadingPanelModule } from '../loading-panel/loading-panel.module';
+import { NanopubActionBarModule } from '../nanopub-action-bar/nanopub-action-bar.module';
 
 @NgModule({
   declarations: [NanopubListComponent],
@@ -11,7 +12,8 @@ import { LoadingPanelModule } from '../loading-panel/loading-panel.module';
     CommonModule,
     NanopubCardModule,
     LoadingPanelModule,
-    ButtonModule
+    ButtonModule,
+    NanopubActionBarModule
   ],
   exports: [NanopubListComponent]
 })

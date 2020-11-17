@@ -34,7 +34,8 @@ export interface Nanopublication {
     updated_at: Date;
     protocol: string;
     rdf_raw: any;
-    publication_info: PublicationInfo
+    publication_info: PublicationInfo,
+    permissions: { read: string[], update: string[], delete: string[] }
 }
 
 /**
