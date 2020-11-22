@@ -9,6 +9,11 @@ function gather() {
     const exact = quoteSelector.exact
     const prefix = quoteSelector.prefix
 
+    if (!prefix || !exact) {
+        alert("Please select some text.")
+        return
+    }
+
     const positionSelector = anchoring.TextPositionAnchor.fromRange(document.body, range)
     const start = positionSelector.start
     const end = positionSelector.end
