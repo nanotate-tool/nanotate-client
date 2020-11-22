@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Nanopublication } from 'src/app/models';
-import { AppService, NanopubsService } from 'src/app/services';
+import { AppService, HypothesisService, NanopubsService } from 'src/app/services';
 import { BaseSubscriptionComponent } from 'src/app/utils';
 
 @Component({
@@ -21,7 +21,7 @@ export class NanopubListComponent extends BaseSubscriptionComponent implements O
   procesingMessage: string = "Searching...";
 
   constructor(private app: AppService, private nanopubsService: NanopubsService,
-    public dialogService: DialogService, private el: ChangeDetectorRef) {
+    public dialogService: DialogService, private el: ChangeDetectorRef, private hypothesis: HypothesisService) {
     super();
   }
 
@@ -41,6 +41,9 @@ export class NanopubListComponent extends BaseSubscriptionComponent implements O
         this.reload()
       })
     );
+    this.addSubscription(
+      this.hypothesis.onProfileChange(() => this.reload())
+    )
   }
 
   /**

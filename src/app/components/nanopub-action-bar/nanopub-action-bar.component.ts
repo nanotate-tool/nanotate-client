@@ -30,7 +30,7 @@ export class NanopubActionBarComponent implements OnInit {
     })
   }
 
-  get showRemoteRdf(): boolean {
+  get showRemoteRdf(): boolean { 
     return this.isProduction && this.nanopub.publication_info && true;
   }
 
@@ -92,7 +92,7 @@ export class NanopubActionBarComponent implements OnInit {
       case 'delete':
         action = 'delete';
       default:
-        return this.havePermissionFor(<any>action, this.hypothesisService.profileData.userid);
+        return this.hypothesisService.profileData && this.havePermissionFor(<any>action, this.hypothesisService.profileData.userid);
     }
   }
 

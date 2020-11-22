@@ -8,6 +8,7 @@ import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core
 export class LoadingPanelComponent implements OnInit {
 
   @Input() message: string;
+  @Input() styleClass: string;
 
   constructor() { }
 

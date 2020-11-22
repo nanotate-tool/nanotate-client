@@ -1,9 +1,16 @@
 .h-user-signin {
     max-width: 350px;
     margin: auto;
+    padding: 1em 0;
+
     .__h_logo {
         margin: 0.5em 0;
         text-align: center;
     }
-    padding: 1em 0;
+}
+
+:host ::ng-deep {
+    .loading-panel {
+        min-width: 327px;
+    }
 }

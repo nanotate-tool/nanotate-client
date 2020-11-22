@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { HypothesisUserSigninDialogComponent } from './hypothesis-user-signin-dialog.component';
+import { LoadingPanelModule } from '../loading-panel/loading-panel.module';
 
 @NgModule({
   declarations: [HypothesisUserSigninComponent, HypothesisUserSigninDialogComponent],
@@ -13,7 +14,8 @@ import { HypothesisUserSigninDialogComponent } from './hypothesis-user-signin-di
     FormsModule,
     ReactiveFormsModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    LoadingPanelModule
   ],
   exports: [HypothesisUserSigninComponent]
 })

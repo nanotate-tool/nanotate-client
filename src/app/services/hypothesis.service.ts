@@ -5,6 +5,7 @@ import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { HypothesisUserSigninDialogComponent } from '../components/hypothesis-user-signin/hypothesis-user-signin-dialog.component';
 import { Annotation, HypothesisGroup, HypothesisProfile, SearchQuery } from '../models';
+import { AppService } from './app.service';
 
 declare var hlib;
 
@@ -12,7 +13,7 @@ declare type ServiceEvents = 'init-reload' | 'reload' | 'error-reload';
 
 export const HYPOTHESIS_USER_REGEX_CLEAR = /(?<=acct:)(.*)(?=@)/g
 
-export const clearHypothesisUser = (user:string) => {
+export const clearHypothesisUser = (user: string) => {
   if (user) {
     let author_matcher = user.match(HYPOTHESIS_USER_REGEX_CLEAR);
     return author_matcher ? author_matcher.shift() : user;
@@ -26,12 +27,11 @@ export const clearHypothesisUser = (user:string) => {
 export class HypothesisService {
 
   public static PUBLIC_GROUP = '__world__';
-  private __fullLoaded: boolean = false;
   private __profileData: HypothesisProfile;
   private __subject: Subject<{ e: ServiceEvents, args?: any }> = new Subject();
   private __profileDataBehavior: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  constructor(private httpClient: HttpClient, public dialogService: DialogService) {
+  constructor(private httpClient: HttpClient, public dialogService: DialogService, private app: AppService) {
     this.reload();
   }
 
@@ -65,9 +65,13 @@ export class HypothesisService {
   }
 
   set hypothesis_user(value: { username: string, token: string }) {
-    localStorage.setItem('h_user', value.username);
-    localStorage.setItem('h_token', value.token);
-    this.reload();
+    if (value) {
+      localStorage.setItem('h_user', value.username);
+      localStorage.setItem('h_token', value.token);
+    } else {
+      localStorage.removeItem('h_user');
+      localStorage.removeItem('h_token');
+    }
   }
 
   get selectedGroup(): HypothesisGroup {
@@ -96,31 +100,56 @@ export class HypothesisService {
   }
 
   /**
-   * determina si el servicio esta completamente cargado
-   */
-  get fullLoaded(): boolean {
-    return this.__fullLoaded;
-  }
-
-  /**
    * datos de perfil del usuario de hypothesis
    */
   get profileData(): HypothesisProfile {
     return this.__profileData;
   }
 
-  reload(withError: boolean = false) {
-    this.__fullLoaded = false;
+  reload(withError: boolean = false, checkUser: boolean = false) {
+    this.__profileData = null;
+    this.__profileDataBehavior.next(this.__profileData);
     this.__subject.next({ e: 'init-reload' });
     return Promise.all([
-      this.userProfile()
+      new Promise(resolve => {
+        if (this.haveUser || checkUser) {
+          resolve(this.userProfile());
+        } else {
+          resolve(this.profileData);
+        }
+      })
     ]).catch((e) => {
       this.__subject.next({ e: 'error-reload', args: e });
       if (withError) { throw e; }
     }).finally(() => {
       this.__subject.next({ e: "reload" });
-      this.__fullLoaded = true;
     });
+  }
+
+  /**
+   * makes the check process if user token is valid in
+   * hypothesis api
+   * @param user username
+   * @param token hypothesis user token
+   */
+  auth(user: string, token: string) {
+    return this.hypothesisGetProfile(token).then(response => {
+      this.hypothesis_user = { token: token, username: user }
+      this.__profileData = response;
+      this.__profileDataBehavior.next(this.__profileData);
+      return true;
+    });
+  }
+
+  /**
+   * deletes all data of session for user and redirects to index
+   */
+  logout() {
+    this.hypothesis_user = null;
+    this.__profileData = null;
+    this.__profileDataBehavior.next(null);
+    this.app.init({ url: null });
+    this.app.redirect('/');
   }
 
   createAnnotationPayload(params) {
@@ -220,13 +249,13 @@ export class HypothesisService {
   userProfile(): Promise<HypothesisProfile> {
     return this.checkHypothesisUser(
       () => {
-        return this.httpClient.get(`${hlib.getSettings().service}/api/profile`, {
-          headers: { 'authorization': `Bearer ${this.hypothesis_user.token}` }
-        }).toPromise()
+        return this.hypothesisGetProfile(this.hypothesis_user.token)
           .then(response => {
             this.__profileData = <HypothesisProfile>response;
             this.__profileDataBehavior.next(this.__profileData);
             return this.__profileData;
+          }).catch(err => {
+            return this.requestUpdateOfUser(async () => null);
           });
       }
     );
@@ -236,16 +265,21 @@ export class HypothesisService {
    * lanza el dialogo de actualizacion de los datos de la cuenta para el usuario
    * de hypothesis
    * @param back funcion a llamar luego de los cambios
+   * @param closable determina si se puede cerrar el dialogo
    */
-  requestUpdateOfUser<T>(back: () => Promise<T>): Promise<T> {
+  requestUpdateOfUser<T>(back: () => Promise<T>, closable: boolean = false): Promise<T> {
     return new Promise<T>((resolve) => {
       const dialogRef = this.dialogService.open(HypothesisUserSigninDialogComponent, {
         modal: true,
-        closable: false,
-        closeOnEscape: false,
+        closable: closable,
+        closeOnEscape: closable,
         data: {
-          backdoor: () => {
+          showRemoveSession: true,
+          backdoor: (destroy) => {
             dialogRef.close();
+            if (destroy) {
+              dialogRef.destroy();
+            }
             resolve(back());
           }
         }
@@ -263,11 +297,45 @@ export class HypothesisService {
   checkHypothesisUser<T>(back: () => Promise<T>): Promise<T> {
     return new Promise<T>((resolve) => {
       if (!this.haveUser) {
-        resolve(this.requestUpdateOfUser(back));
+        resolve(this.requestUpdateOfUser(back, false));
       } else {
         return resolve(back());
       }
     });
+  }
+
+  /**
+   * makes request for get the user profile data associated with the passed token
+   * @param user_token user token
+   */
+  private hypothesisGetProfile(user_token: string) {
+    return this.httpClient.get(`${hlib.getSettings().service}/api/profile`, {
+      headers: { 'authorization': `Bearer ${user_token}` }
+    }).toPromise()
+      .then(response => <HypothesisProfile>response)
+      .then(response => {
+        if (!response || !response.userid) {
+          throw 'Bad User Token!!';
+        }
+        return response;
+      })
+      .catch(this.hypothesisHandleErrors());
+  }
+
+  private hypothesisHandleErrors() {
+    return (error: Response) => {
+      if (error instanceof Response) {
+        return error.json()
+          .then(error_data => {
+            if (error_data && error_data.reason) {
+              throw error_data.reason
+            } else {
+              throw 'Unknown error in hypothesis Api';
+            }
+          });
+      }
+      throw error;
+    };
   }
 
 }

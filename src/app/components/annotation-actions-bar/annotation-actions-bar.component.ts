@@ -19,7 +19,7 @@ export class AnnotationActionsBarComponent extends AnnotationPropsComponent impl
   procesing: boolean = false;
 
   constructor(public hypothesisService: HypothesisService, @Optional() private confirmationService: ConfirmationService,
-  private el:ChangeDetectorRef) {
+    private el: ChangeDetectorRef) {
     super();
   }
 
@@ -54,7 +54,7 @@ export class AnnotationActionsBarComponent extends AnnotationPropsComponent impl
         });
       }
       return false;
-    }).finally(()=>{
+    }).finally(() => {
       this.procesing = false;
       this.el.detectChanges();
     });
@@ -70,7 +70,7 @@ export class AnnotationActionsBarComponent extends AnnotationPropsComponent impl
     });
   }
 
-  confirm(message:string = 'Are you sure that you want delete this annotation?' ): Promise<boolean> {
+  confirm(message: string = 'Are you sure that you want delete this annotation?'): Promise<boolean> {
     return new Promise((resolve) => {
       if (this.confirmationService) {
         this.confirmationService.confirm({
@@ -78,7 +78,7 @@ export class AnnotationActionsBarComponent extends AnnotationPropsComponent impl
           accept: () => {
             resolve(true);
           },
-          reject: () =>{
+          reject: () => {
             resolve(false);
           }
         });
@@ -95,7 +95,8 @@ export class AnnotationActionsBarComponent extends AnnotationPropsComponent impl
       case 'edit':
         action = 'update';
       default:
-        return this.havePermissionFor(<any>action, this.hypothesisService.profileData.userid);
+        return this.hypothesisService.profileData &&
+          this.havePermissionFor(<any>action, this.hypothesisService.profileData.userid);
     }
   }
 

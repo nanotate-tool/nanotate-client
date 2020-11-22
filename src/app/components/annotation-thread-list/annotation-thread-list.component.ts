@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Annotation, SearchQuery } from 'src/app/models';
 import { HypothesisService, NanopubsService } from 'src/app/services';
-import { NANOPUBS } from 'src/app/utils';
+import { NANOPUBS, BaseSubscriptionComponent } from 'src/app/utils';
 
 @Component({
   selector: 'a2np-c-annotation-thread-list',
@@ -9,7 +9,7 @@ import { NANOPUBS } from 'src/app/utils';
   styleUrls: ['./annotation-thread-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AnnotationThreadListComponent implements OnInit, OnChanges {
+export class AnnotationThreadListComponent extends BaseSubscriptionComponent implements OnInit, OnChanges {
 
   @Input() query: SearchQuery;
   @Output() onAction: EventEmitter<{ action: 'edit' | 'delete' | 'nanopub', annotation, data?: any }> = new EventEmitter();
@@ -34,15 +34,17 @@ export class AnnotationThreadListComponent implements OnInit, OnChanges {
   filters: { stepGroup?: string } = { stepGroup: null };
 
   constructor(public hypothesisService: HypothesisService, private nanopubs: NanopubsService,
-    private el: ChangeDetectorRef) { }
+    private el: ChangeDetectorRef) { super(); }
 
   ngOnInit(): void {
-    this.hypothesisService.onProfileChange((profile) => {
-      this.procesing = !profile && true;
-    });
-    if (this.hypothesisService.fullLoaded) {
-      this.search();
-    }
+    this.addSubscription(
+      this.hypothesisService.onProfileChange((profile) => {
+        this.procesing = !profile && true;
+        if (profile) {
+          this.search();
+        }
+      })
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -72,8 +74,8 @@ export class AnnotationThreadListComponent implements OnInit, OnChanges {
     return this.annotations && this.annotations.length <= 0;
   }
 
-  get isFiltersEmpty():boolean{
-    return !this.filters || this.filtersSchema.filter(schema => this.filters[schema.key]).length == 0; 
+  get isFiltersEmpty(): boolean {
+    return !this.filters || this.filtersSchema.filter(schema => this.filters[schema.key]).length == 0;
   }
 
   get filteredAnnotations(): Annotation[] {
@@ -104,7 +106,7 @@ export class AnnotationThreadListComponent implements OnInit, OnChanges {
     }
   }
 
-  filterAt(key:string, value) {
+  filterAt(key: string, value) {
     return this.filter({ [key]: value });
   }
 

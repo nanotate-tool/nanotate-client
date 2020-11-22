@@ -9,7 +9,7 @@ import { BaseSubscriptionComponent } from '../utils';
 })
 export class NanopubsComponent extends BaseSubscriptionComponent implements OnInit {
 
-  loaded: boolean = false;
+  loaded: boolean = true;
   tabs: MenuItem[];
   activeTab: MenuItem;
 
@@ -22,7 +22,7 @@ export class NanopubsComponent extends BaseSubscriptionComponent implements OnIn
     this.loadTabs();
     this.addSubscription(
       this.hypothesisService.onProfileChange(profile => {
-        this.loaded = profile && true;
+        //this.loaded = profile && true;
       })
     );
   }
