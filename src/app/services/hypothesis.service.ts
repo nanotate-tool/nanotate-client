@@ -28,20 +28,10 @@ export class HypothesisService {
 
   public static PUBLIC_GROUP = '__world__';
   private __profileData: HypothesisProfile;
-  private __subject: Subject<{ e: ServiceEvents, args?: any }> = new Subject();
   private __profileDataBehavior: BehaviorSubject<any> = new BehaviorSubject(null);
 
   constructor(private httpClient: HttpClient, public dialogService: DialogService, private app: AppService) {
     this.reload();
-  }
-
-  /**
-   * suscripcion a un evento que se presente en este servicio
-   * @param event evento a escuchar
-   * @param sub controlador
-   */
-  subscribe(event: ServiceEvents, sub: (args) => void): Subscription {
-    return this.__subject.pipe(filter(e => e.e == event), map(e => e.args)).subscribe(sub);
   }
 
   /**
@@ -109,7 +99,6 @@ export class HypothesisService {
   reload(withError: boolean = false, checkUser: boolean = false) {
     this.__profileData = null;
     this.__profileDataBehavior.next(this.__profileData);
-    this.__subject.next({ e: 'init-reload' });
     return Promise.all([
       new Promise(resolve => {
         if (this.haveUser || checkUser) {
@@ -119,11 +108,8 @@ export class HypothesisService {
         }
       })
     ]).catch((e) => {
-      this.__subject.next({ e: 'error-reload', args: e });
       if (withError) { throw e; }
-    }).finally(() => {
-      this.__subject.next({ e: "reload" });
-    });
+    })
   }
 
   /**
