@@ -1,5 +1,5 @@
 <ng-container *ngIf="!procesingStates.saving else loading_template">
-    <form [formGroup]="form" (ngSubmit)="publish()" class="p-fluid p-formgrid annotation-editor">
+    <form [formGroup]="form" #ngForm="ngForm" (ngSubmit)="publish()" class="p-fluid p-formgrid annotation-editor">
         <div class="annotation-card">
             <p>You came from <a href="{{annotation.uri}}">{{annotation.document.title}}</a></p>
             <p>In that page you selected:</p>
@@ -8,8 +8,12 @@
         <div class="p-field">
             <label>Tag</label>
             <p-multiSelect [filter]="false" [maxSelectedLabels]="8" selectedItemsLabel="{0} Tags Selected"
-                defaultLabel="Select Tag" [options]="tagsItems" formControlName="tags"
-                (onChange)="onChangeTag()" [showHeader]="false" ></p-multiSelect>
+                [showHeader]="false" defaultLabel="Select Tag" [options]="tagsItems" formControlName="tags"
+                (onChange)="onChangeTag()" [styleClass]="isInvalidControl('tags',ngForm.submitted) ? 'p-invalid' : ''">
+            </p-multiSelect>
+            <span class="p-invalid" *ngIf="isInvalidControl('tags',ngForm.submitted)">
+                Tag field is required
+            </span>
         </div>
         <div class="p-field">
             <label>Ontology</label>

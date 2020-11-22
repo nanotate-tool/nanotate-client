@@ -96,6 +96,18 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
   }
 
   /**
+   * determines if control has any error
+   * and checking if this has been touched or dirty
+   * @param control control alias to check
+   * @param submitted determines if parent form was submitted (default = true)
+   */
+  isInvalidControl(control: string, submitted: boolean = true) {
+    return (submitted || this.form && this.form.controls[control]
+      && this.form.controls[control].touched || this.form.controls[control].dirty)
+      && this.form?.controls[control].invalid;
+  }
+
+  /**
    * realiza el proceso de publicacion de la annotacion
    */
   publish() {
@@ -103,7 +115,7 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
       this.procesingStates.saving = true;
       const annotation = this.rawAnnotation;
       const _operation = annotation.id ? this.hypothesisService.updateAnnotation(annotation) : this.hypothesisService.postAnnotation(annotation);
-      _operation.then(response => {
+      return _operation.then(response => {
         return new Promise((resolve) => {
           if (response?.response) {
             this.annotation = response.response;
@@ -121,6 +133,11 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
       }).finally(() => {
         this.procesingStates.saving = false;
       });
+    } else {
+      if (this.form.controls.tags.invalid) {
+        this.messageService.add({ severity: 'error', summary: "Please, add a tag to the selected text before to publish", sticky: true })
+      }
+      return Promise.reject('invalid-form')
     }
   }
 
@@ -179,7 +196,7 @@ export class AnnotationEditorComponent extends AnnotationPropsComponent implemen
       );
       this.el.markForCheck();
     });
-    
+
   }
 
 }
