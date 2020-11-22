@@ -9,7 +9,7 @@ function gather() {
     const exact = quoteSelector.exact
     const prefix = quoteSelector.prefix
 
-    if (!prefix || !exact) {
+    if (!exact) {
         alert("Please select some text.")
         return
     }
