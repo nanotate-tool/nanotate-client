@@ -41,6 +41,7 @@ export class AnnotationThreadListComponent extends BaseSubscriptionComponent imp
       this.hypothesisService.onProfileChange((profile) => {
         this.procesing = !profile && true;
         if (profile) {
+          console.log('refreshing')
           this.search();
         }
       })
@@ -95,6 +96,7 @@ export class AnnotationThreadListComponent extends BaseSubscriptionComponent imp
   search() {
     if (!this.procesing) {
       this.procesing = true;
+      this.el.markForCheck();
       this.hypothesisService.search(this.query)
         .then(response => {
           this.reset();
