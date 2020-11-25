@@ -144,7 +144,7 @@ export class NanopubPublisherComponent implements OnInit, OnChanges {
     return new Promise((resolve) => {
       this.processing_message = 'Search nanopublication...';
       this.el.markForCheck();
-      resolve(this.nanopubsService.nanopub(this.step.id)
+      resolve(this.nanopubsService.nanopub(this.step.id, true)
         .then(response => {
           this.remoteNanopublication = response;
           this.el.markForCheck();

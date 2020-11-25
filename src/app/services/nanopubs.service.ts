@@ -12,7 +12,7 @@ import { NANOPUBS } from '../utils';
   providedIn: 'root'
 })
 export class NanopubsService {
-  
+
   /**
    * default rdf format in app
    */
@@ -45,10 +45,15 @@ export class NanopubsService {
   /**
    * retorna la nanopublicacion relacionada al identificador pasado
    * @param id identificador de la nanopublicacion
+   * @param for_compare true si el rdf es para comparacion false de lo contrario
    */
-  nanopub(id: string): Promise<Nanopublication> {
+  nanopub(id: string, for_compare: boolean = false): Promise<Nanopublication> {
+    const query_params = { rdf_format: NanopubsService.default_rdf_format };
+    if (for_compare) {
+      query_params['fcompare'] = '1'
+    }
     return this.httpClient.get(this.apiUrl(`nanopub/${id}`), {
-      params: { rdf_format: NanopubsService.default_rdf_format }
+      params: query_params
     }).toPromise<any>()
       .then(this.parseNanopublication);
   }
