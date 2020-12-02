@@ -37,7 +37,10 @@
     </div>
 </ng-template>
 <ng-template #inline_layout>
-    <div class="nanopub-card p-shadow-2 inline p-p-2">
+    <div class="nanopub-card p-shadow-2 inline p-p-2" [pTooltip]="nanopub.title">
+        <div class="p-text-truncate title-panel">
+            {{nanopub.title}}
+        </div>
         <span class="p-m-1">
             <i class="pi pi-user"></i>
             <span> Author: {{author}}</span>

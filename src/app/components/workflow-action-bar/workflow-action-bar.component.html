@@ -1,0 +1,8 @@
+<div class="p-mt-2 p-text-center">
+    <ng-container *ngIf="canPerform('see_rdf')">
+        <p-button styleClass="p-button-outlined p-button-text" icon="pi pi-file-o" label="Nanopub"
+            (onClick)="showRdfOfNanopub(workflow.rdf)"></p-button>
+    </ng-container>
+    <p-button *ngIf="canPerform('delete')" styleClass="p-button-outlined p-button-text p-button-danger"
+        icon="pi pi-trash" label="Delete" (onClick)="deleteWorkflow(workflow)"></p-button>
+</div>

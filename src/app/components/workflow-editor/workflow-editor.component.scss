@@ -1,0 +1,10 @@
+.workflow-editor-component {
+    width: 100%;
+    max-width: 900px;
+}
+
+:host ::ng-deep {
+    .nanopub-card.inline {
+        max-width: 300px;
+    }
+}

@@ -27,3 +27,8 @@ export * from './nanopub-list/nanopub-list.component';
 export * from './nanopub-list/nanopub-list.module';
 export * from './annotation-actions-bar/annotation-actions-bar.component';
 export * from './annotation-actions-bar/annotation-actions-bar.module';
+export * from './workflow-editor/workflow-editor-dialog.component';
+export * from './workflow-editor/workflow-editor.component';
+export * from './workflow-editor/workflow-editor.module';
+export * from './workflow-list/workflow-list.module';
+export * from './workflow-list/workflow-list.component';

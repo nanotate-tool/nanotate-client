@@ -46,6 +46,10 @@ export class NanopubListComponent extends BaseSubscriptionComponent implements O
     )
   }
 
+  get emptyNanopubs(): boolean {
+    return this.nanopubs?.length <= 0;
+  }
+
   /**
    * realiza el proceso de carga del componente
    */

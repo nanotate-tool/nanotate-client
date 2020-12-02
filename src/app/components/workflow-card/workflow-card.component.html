@@ -1,0 +1,18 @@
+<div class="workflow-card-component p-shadow-3 p-p-3 p-mb-2">
+    <div class="__workflow-body">
+        <div class="p-d-flex">
+            <h2 class="_title p-my-1" style="width: 100%;">{{workflow.label}}</h2>
+            <small>Published at {{workflow.created_at|date}}</small>
+        </div>
+        <p class="_description">{{workflow.description}}</p>
+    </div>
+    <div class="_workflow-nanopubs">
+        <h3 class="p-my-1">Nanopublications used</h3>
+        <ng-container *ngFor="let nanopub of workflow.nanopubs">
+            <a2np-c-nanopub-card [nanopub]="nanopub" layout="inline"></a2np-c-nanopub-card>
+        </ng-container>
+    </div>
+    <div class="workflows-commands">
+        <ng-content></ng-content>
+    </div>
+</div>

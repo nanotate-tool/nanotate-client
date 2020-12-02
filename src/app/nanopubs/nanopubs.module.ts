@@ -4,12 +4,13 @@ import { NanopubsRoutingModule } from './nanopubs-routing.module';
 import { RegisterPageComponent, NanopubsPageComponent } from './pages';
 import {
   AnnotationRegistrationModule, AnnotationThreadListModule, LoadingPanelModule, NanopubCardModule,
-  NanopubListModule, NanopubPublisherModule, NanopubRdfBodyModule, SiteMetadataCardModule, SiteUrlEditorModule
+  NanopubListModule, NanopubPublisherModule, NanopubRdfBodyModule, SiteMetadataCardModule, SiteUrlEditorModule, WorkflowListModule
 } from '../components';
 import { NanopubsComponent } from './nanopubs.component';
 import { PageLayoutModule } from '../layout';
 import { TabMenuModule } from "primeng/tabmenu";
 import { StatsPageComponent } from './pages/stats-page/stats-page.component';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
   imports: [
@@ -25,6 +26,8 @@ import { StatsPageComponent } from './pages/stats-page/stats-page.component';
     TabMenuModule,
     SiteMetadataCardModule,
     NanopubListModule,
+    WorkflowListModule,
+    ButtonModule,
     LoadingPanelModule
   ],
   declarations: [RegisterPageComponent, NanopubsComponent, NanopubsPageComponent, StatsPageComponent]

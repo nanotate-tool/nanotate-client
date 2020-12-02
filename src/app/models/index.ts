@@ -7,3 +7,4 @@ export * from './site_metadata';
 export * from './protocols';
 export * from './hypothesis';
 export * from './stats';
+export * from './workflows';

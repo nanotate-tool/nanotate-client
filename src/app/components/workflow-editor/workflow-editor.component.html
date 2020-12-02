@@ -1,0 +1,32 @@
+<ng-container *ngIf="!procesing else loading_template">
+    <form [formGroup]="form" (ngSubmit)="save()" class="p-fluid p-formgrid workflow-editor-component">
+        <div class="p-field">
+            <label>Label</label>
+            <input pInputText formControlName="label">
+        </div>
+        <div class="p-field">
+            <label>Description</label>
+            <textarea pInputTextarea rows="5" cols="60" formControlName="description"></textarea>
+        </div>
+        <div class="p-field" style="min-width: 878px;">
+            <label>
+                Steps <br />
+                <small>select the steps for workflow</small>
+            </label>
+            <p-pickList [source]="nanopubs" [target]="selectedNanopubs" [responsive]="false">
+                <ng-template let-nanopub pTemplate="item">
+                    <div>
+                        <a2np-c-nanopub-card [nanopub]="nanopub" layout="inline"></a2np-c-nanopub-card>
+                    </div>
+                </ng-template>
+            </p-pickList>
+        </div>
+        <div>
+            <button pButton type="submit" label="Publish workflow"></button>
+        </div>
+    </form>
+</ng-container>
+
+<ng-template #loading_template>
+    <a2np-c-loading-panel message="Saving..."></a2np-c-loading-panel>
+</ng-template>

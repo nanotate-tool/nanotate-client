@@ -1,6 +1,35 @@
 <div class="p-grid p-jc-center">
     <div class="p-col-8">
-        <a2np-c-nanopub-list></a2np-c-nanopub-list>
+        <ng-container [ngSwitch]="perspective">
+            <ng-container *ngSwitchCase="'nanopubs'">
+                <ng-container *ngTemplateOutlet="nanopubs"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'workflows'">
+                <ng-container *ngTemplateOutlet="workflows"></ng-container>
+            </ng-container>
+        </ng-container>
+        <ng-template #nanopubs>
+            <a2np-c-nanopub-list>
+                <ng-container head-buttons>
+                    <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-success"
+                        (click)="newWorkflow()" label="New workflow" [disabled]="procesingNanopubs"></button>
+                    <button pButton type="button" label="Workflows"
+                        class="p-button p-button-primary"
+                        (click)="turnPerspective('workflows')"></button>
+                </ng-container>
+            </a2np-c-nanopub-list>
+        </ng-template>
+        <ng-template #workflows>
+            <a2np-c-workflow-list>
+                <ng-container head-buttons>
+                    <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-success"
+                        (click)="newWorkflow()" label="New workflow" [disabled]="procesingNanopubs"></button>
+                    <button pButton type="button" label="Nanopubs"
+                        class="p-button p-button-primary"
+                        (click)="turnPerspective('nanopubs')"></button>
+                </ng-container>
+            </a2np-c-workflow-list>
+        </ng-template>
     </div>
     <div class="p-col-4">
         <ng-container *ngIf="procesingSitedata else loading_panel">
