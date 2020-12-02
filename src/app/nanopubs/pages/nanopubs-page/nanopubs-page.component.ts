@@ -58,7 +58,6 @@ export class NanopubsPageComponent extends BaseSubscriptionComponent implements 
           header: 'Workflow',
           closable: true,
           closeOnEscape: false,
-          style:'width:900px',
           data: {
             nanopubs: nanopubs,
             onSave: () => {
