@@ -47,3 +47,7 @@ a {
     border: 1px solid var.$primary-color;
     color: white;
 }
+
+.numbered-list {
+    list-style-type: decimal-leading-zero;
+}

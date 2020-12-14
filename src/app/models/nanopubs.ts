@@ -36,6 +36,8 @@ export interface Nanopublication {
     rdf_raw: any;
     publication_info: PublicationInfo,
     permissions: { read: string[], update: string[], delete: string[] }
+    workflows: { id: string, label: string, description: string }[];
+    hasWorkflows: boolean;
 }
 
 /**

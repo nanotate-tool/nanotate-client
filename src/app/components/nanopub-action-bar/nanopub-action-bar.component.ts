@@ -12,6 +12,15 @@ import { NanopubRdfBodyDialogComponent } from '../nanopub-rdf-body/nanopub-rdf-b
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NanopubActionBarComponent implements OnInit {
+  static CONFIRM_MESSAGE: string = 'Are you sure that you want delete this nano publication?';
+  static CONFIRM_MESSAGE_WITH_WORKFLOW: string = `Are you sure that you want delete this nano publication?
+    <div class="p-py-2 p-text-left">
+      <strong class="p-invalid" >This nano publication has related workflows !!!</strong>
+      <ul class="p-text-bold numbered-list">
+        \${details}
+      </ul>
+    </div>
+  ` ;
 
   @Input() nanopub: Nanopublication;
   @Output() onNeedReload: EventEmitter<Nanopublication> = new EventEmitter();
@@ -30,7 +39,7 @@ export class NanopubActionBarComponent implements OnInit {
     })
   }
 
-  get showRemoteRdf(): boolean { 
+  get showRemoteRdf(): boolean {
     return this.isProduction && this.nanopub.publication_info && true;
   }
 
@@ -50,7 +59,8 @@ export class NanopubActionBarComponent implements OnInit {
   }
 
   deleteNanopub(nanopub: Nanopublication) {
-    return this.confirm().then(_continue => {
+    const confirmMessage = this.confirmationMessageForDeletion(nanopub);
+    return this.confirm(confirmMessage).then(_continue => {
       if (_continue) {
         return this.nanopubsService.delete(nanopub)
           .then(response => {
@@ -67,7 +77,7 @@ export class NanopubActionBarComponent implements OnInit {
     });
   }
 
-  confirm(message: string = 'Are you sure that you want delete this nano publication?'): Promise<boolean> {
+  confirm(message: string = NanopubActionBarComponent.CONFIRM_MESSAGE): Promise<boolean> {
     return new Promise((resolve) => {
       if (this.confirmationService) {
         this.confirmationService.confirm({
@@ -99,6 +109,18 @@ export class NanopubActionBarComponent implements OnInit {
   havePermissionFor(action: 'delete' | 'update', user: string): boolean {
     return user && this.nanopub?.permissions && this.nanopub.permissions[action]
       && this.nanopub.permissions[action].includes(user.trim());
+  }
+
+  /**
+   * calculates the confirmation message for deleting of passed nanopublication
+   * @param nanopub nanopublication
+   */
+  private confirmationMessageForDeletion(nanopub: Nanopublication) {
+    if (nanopub.hasWorkflows) {
+      let confirmMessage = NanopubActionBarComponent.CONFIRM_MESSAGE_WITH_WORKFLOW;
+      return confirmMessage.replace("${details}", nanopub.workflows.map(workflow => `<li>${workflow.label}</li>`).join(""));
+    }
+    return NanopubActionBarComponent.CONFIRM_MESSAGE;
   }
 
 }
