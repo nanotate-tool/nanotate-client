@@ -16,6 +16,8 @@ export class WorkflowActionBarComponent implements OnInit {
   @Input() workflow: Workflow;
   @Output() onNeedReload: EventEmitter<Workflow> = new EventEmitter();
 
+  processing: boolean = false;
+
   constructor(private workflowService: WorkflowsService,
     private messageService: MessageService, @Optional() private confirmationService: ConfirmationService,
     public dialogService: DialogService, private el: ChangeDetectorRef, private hypothesisService: HypothesisService
@@ -42,6 +44,8 @@ export class WorkflowActionBarComponent implements OnInit {
   deleteWorkflow(workflow: Workflow) {
     return this.confirm().then(_continue => {
       if (_continue) {
+        this.processing = true;
+        this.el.markForCheck();
         return this.workflowService.delete(workflow)
           .then(response => {
             if (response.status == 'ok') {
@@ -51,6 +55,9 @@ export class WorkflowActionBarComponent implements OnInit {
               this.messageService.add({ severity: 'error', summary: 'Error on delete Workflow', detail: response.message })
             }
             return response;
+          }).finally(() => {
+            this.processing = false;
+            this.el.markForCheck();
           });
       }
       return false;
