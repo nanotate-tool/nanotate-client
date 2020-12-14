@@ -26,6 +26,7 @@ export class NanopubActionBarComponent implements OnInit {
   @Output() onNeedReload: EventEmitter<Nanopublication> = new EventEmitter();
 
   isProduction: boolean = false;
+  processing: boolean = false;
 
   constructor(private app: AppService, private nanopubsService: NanopubsService,
     private messageService: MessageService, @Optional() private confirmationService: ConfirmationService,
@@ -62,6 +63,8 @@ export class NanopubActionBarComponent implements OnInit {
     const confirmMessage = this.confirmationMessageForDeletion(nanopub);
     return this.confirm(confirmMessage).then(_continue => {
       if (_continue) {
+        this.processing = true;
+        this.el.markForCheck();
         return this.nanopubsService.delete(nanopub)
           .then(response => {
             if (response.status == 'ok') {
@@ -71,7 +74,7 @@ export class NanopubActionBarComponent implements OnInit {
               this.messageService.add({ severity: 'error', summary: 'Error on delete nanoPublication', detail: response.message })
             }
             return response;
-          });
+          }).finally(() => { this.processing = false; this.el.markForCheck(); });
       }
       return false;
     });

@@ -1,11 +1,11 @@
 <div class="p-mt-2 p-text-center">
     <ng-container *ngIf="canPerform('see_rdf')">
         <p-button *ngIf="!showRemoteRdf" styleClass="p-button-outlined p-button-text" icon="pi pi-file-o"
-            label="Nanopub" (onClick)="showRdfOfNanopub(nanopub.rdf_raw)"></p-button>
+            label="Nanopub" (onClick)="showRdfOfNanopub(nanopub.rdf_raw)" [disabled]="processing"></p-button>
         <a *ngIf="showRemoteRdf" pButton [href]="nanopub.publication_info.nanopub_uri"
             class="p-button p-button-link p-button-outlined p-button-text undecorated" target="_blank"
             icon="pi pi-file-o" label="Nanopub"></a>
     </ng-container>
     <p-button *ngIf="canPerform('delete')" styleClass="p-button-outlined p-button-text p-button-danger"
-        icon="pi pi-trash" label="Delete" (onClick)="deleteNanopub(nanopub)"></p-button>
+        icon="pi pi-trash" label="Delete" (onClick)="deleteNanopub(nanopub)" [disabled]="processing"></p-button>
 </div>
