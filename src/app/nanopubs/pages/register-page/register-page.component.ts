@@ -96,9 +96,13 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
       const parseData = JSON.parse(params.data);
       this.nanopubs.settings.then(settings => {
         const annotation = this.hypothesisService.createAnnotationPayload(parseData);
-        annotation.tags = settings.ontologies.map(ontology => NANOPUBS.encodeOntologyTag(ontology)).concat(annotation.tags || []);
-        this.handleAnnotation({ action: 'new', annotation: annotation });
-        this.router.navigate(['.'], { relativeTo: this.activeRoute });
+        this.nanopubs.cleanUrl(annotation.uri).then(url => {
+          annotation.uri = url;
+          annotation.tags = settings.ontologies.map(ontology => NANOPUBS.encodeOntologyTag(ontology)).concat(annotation.tags || []);
+          this.handleAnnotation({ action: 'new', annotation: annotation });
+          this.router.navigate(['.'], { relativeTo: this.activeRoute });
+          console.log(annotation)
+        });
       });
     } else if (!this.annotation) {
       this.perspective = 'home';

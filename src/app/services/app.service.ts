@@ -151,6 +151,7 @@ export class AppService {
       return this.protocolsService.getProtocol(this.__siteUrl)
         .then(response => {
           if (response && response.site_data) {
+            this.__siteUrl = response.site_data.uri;
             this.__siteMetada = response.site_data;
             this.__metadata_behavior.next(this.__siteMetada)
           } else {

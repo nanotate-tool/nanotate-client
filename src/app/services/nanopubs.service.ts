@@ -43,6 +43,18 @@ export class NanopubsService {
   }
 
   /**
+   * makes the process of cleaning of passed url in nanotate api
+   * @param url url to be clean
+   */
+  cleanUrl(url: string): Promise<string> {
+    return this.httpClient.get(this.apiUrl('cleanurl', false), {
+      params: { uri: url }
+    }).toPromise().then(response => {
+      return response['uri'];
+    });
+  }
+
+  /**
    * retorna la nanopublicacion relacionada al identificador pasado
    * @param id identificador de la nanopublicacion
    * @param for_compare true si el rdf es para comparacion false de lo contrario
