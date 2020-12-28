@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter, Input } from '@angular/core';
 import { Workflow } from 'src/app/models';
 import { AppService, WorkflowsService } from 'src/app/services';
 import { BaseSubscriptionComponent } from 'src/app/utils';
@@ -10,6 +10,9 @@ import { BaseSubscriptionComponent } from 'src/app/utils';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WorkflowListComponent extends BaseSubscriptionComponent implements OnInit {
+
+  @Input() showNewWorkflow: boolean = false;
+  @Output() onNewWorkflow: EventEmitter<any> = new EventEmitter();
 
   workflows: Workflow[] = [];
   procesing: boolean = false;

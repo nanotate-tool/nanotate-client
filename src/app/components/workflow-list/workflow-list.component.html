@@ -9,7 +9,11 @@
     </div>
     <div class="__nanopubs_body">
         <ng-container *ngIf="emptyWorkflows else workflows_body">
-            <h5 style="color: red;" class="p-my-6">No workflows found!!</h5>
+            <div class="p-text-center">
+                <h1 style="color: red;" class="p-my-6">No workflows found!!</h1>
+                <button *ngIf="showNewWorkflow" pButton [disabled]="procesing" icon="pi pi-plus"
+                    class="p-button-rounded" (click)="onNewWorkflow.emit()" label="Create Workflow !"></button>
+            </div>
         </ng-container>
         <ng-template #workflows_body>
             <a2np-c-workflow-card *ngFor="let workflow of workflows" [workflow]="workflow">

@@ -9,7 +9,7 @@
                 </a2np-c-annotation-editor>
             </ng-container>
             <ng-container *ngSwitchCase="'nanopub'">
-                <a2np-c-nanopub-publisher [step]="nanopub.step" [annotations]="nanopub.annotations" >
+                <a2np-c-nanopub-publisher [step]="nanopub.step" [annotations]="nanopub.annotations">
                 </a2np-c-nanopub-publisher>
             </ng-container>
         </ng-container>
@@ -21,8 +21,15 @@
 </div>
 
 <ng-template #home_template>
-    <h5>Go to site an select text and annotate</h5>
-    <a href="{{app.siteData.url}}">Go to site</a>
+    <div class="p-text-center p-py-5">
+        <h1>
+            <span style="color: rgba(231, 48, 16, 0.87);">No text has been selected</span>
+            <br>
+            <span>Go to the site an select text and annotate</span>
+        </h1>
+        <a pButton href="{{app.siteData.url}}" class="p-button-primary" label="Go to site" icon="pi pi-external-link"
+            style="text-decoration: none;"></a>
+    </div>
 </ng-template>
 
 <ng-template #loading_template>

@@ -4,6 +4,7 @@ import { SiteUrlEditorComponent } from './site-url-editor.component';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   declarations: [SiteUrlEditorComponent],
@@ -12,7 +13,8 @@ import { InputTextModule } from 'primeng/inputtext';
     FormsModule,
     ReactiveFormsModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    TooltipModule
   ],
   exports: [SiteUrlEditorComponent]
 })

@@ -7,6 +7,8 @@
             </span>
             <input pInputText class="site-input" [pattern]="_inputRegex" type="text" formControlName="site"
                 placeholder="https://mysite.com" />
+            <a *ngIf="showDeleteButton" pButton icon="pi pi-external-link" class="p-button-primary" type="button"
+                [href]="form.controls.site.value" pTooltip="Go to Site" style="text-decoration: none;"></a>
             <button *ngIf="showDeleteButton" pButton icon="pi pi-times" class="p-button-danger" type="button"
                 (click)="delete()"></button>
         </div>
