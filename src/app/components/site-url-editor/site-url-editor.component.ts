@@ -23,6 +23,9 @@ export class SiteUrlEditorComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
+    this.app.subscribe(['app-ch-site-metadata'], () => {
+      this.__form = null;
+    })
   }
 
   get form(): FormGroup {

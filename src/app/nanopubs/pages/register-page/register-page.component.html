@@ -5,7 +5,7 @@
             </ng-container>
             <ng-container *ngSwitchCase="'editor'">
                 <a2np-c-annotation-editor *ngIf="annotation" [annotation]="annotation"
-                    (onUpdate)="refreshAnnotations(true)">
+                    (onUpdate)="refreshAnnotations()">
                 </a2np-c-annotation-editor>
             </ng-container>
             <ng-container *ngSwitchCase="'nanopub'">

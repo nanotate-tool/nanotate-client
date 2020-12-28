@@ -32,7 +32,7 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
    */
   nanopub: any = {};
   private __query: any;
-  private uri_snapshot: string;
+  //private uri_snapshot: string;
 
   constructor(private activeRoute: ActivatedRoute, private hypothesisService: HypothesisService,
     public app: AppService, private router: Router, private nanopubs: NanopubsService) {
@@ -40,17 +40,19 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
   }
 
   ngOnInit(): void {
-    this.uri_snapshot = this.app.siteData.url;
+    //this.uri_snapshot = this.app.siteData.url;
     // routing events
     this.addSubscription(this.activeRoute.queryParams.subscribe((params) => this.handleQueryParams(params)));
     // app reload
     this.addSubscription(
-      this.app.subscribe('app-ch-site-metadata', () => this.refreshAnnotations())
+      this.app.subscribe('app-ch-site-metadata', () => {
+        this.refreshAnnotations();
+      })
     );
   }
 
   get query(): any {
-    if (!this.__query) {
+    if (!this.__query && this.app.siteData.metadata) {
       this.__query = { limit: 200, url: this.app.siteData.url };
     }
     return this.__query;
@@ -59,15 +61,9 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
   /**
    * lanza el evento de actualizacion de las anotaciones
    * de la pagina
-   * @param forceHome true para forzar la ida al home false de lo contrario
    */
-  refreshAnnotations(forceHome: boolean = false) {
-    if (forceHome || (this.uri_snapshot != this.app.siteData.url)) {
-      this.perspective = 'home';
-      this.uri_snapshot = this.app.siteData.url;
-    }
+  refreshAnnotations() {
     this.__query = null;
-    //this.annotationsThread.search();
   }
 
   /**

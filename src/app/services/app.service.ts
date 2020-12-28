@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Subject, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators'
 import { environment } from 'src/environments/environment';
 import { SiteMetaData } from '../models';
@@ -42,7 +42,7 @@ export class AppService {
     this.reload({ url: this.__siteUrl });
     // listen routing events
     this.activatedRoute.queryParams.subscribe(params => {
-      this.checkQueryParams(this.activatedRoute.snapshot, true);
+      this.checkQueryParams(this.activatedRoute.snapshot, false);
     });
   }
 
@@ -51,7 +51,7 @@ export class AppService {
     this.__siteUrl = args.url;
     this.exec('app-refresh', this);
     this.exec('app-ch-site', this);
-    Promise.all(
+    return Promise.all(
       [this.fetchSiteMetadata()]
     ).then((data) => {
       this.exec('app-ch-site-metadata', this.__siteMetada);
@@ -110,12 +110,7 @@ export class AppService {
     const params = route.queryParams;
     this.__redirect = params['redirect'];
     if (params['url'] && this.__siteUrl != params['url']) {
-      this.reload({ url: params['url'] });
-      if (redirect) {
-        const pathSegments = route['_urlSegment'].segments.map(sgmt => sgmt.path);
-        const queryParams = { ...params, url: undefined };
-        this.router.navigate(pathSegments, { queryParams });
-      }
+      return this.reload({ url: params['url'] });
     }
   }
 

@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DialogService } from 'primeng/dynamicdialog';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Subject, Subscription } from 'rxjs';
 import { HypothesisUserSigninDialogComponent } from '../components/hypothesis-user-signin/hypothesis-user-signin-dialog.component';
 import { Annotation, HypothesisGroup, HypothesisProfile, SearchQuery } from '../models';
 import { AppService } from './app.service';
@@ -28,7 +27,9 @@ export class HypothesisService {
 
   public static PUBLIC_GROUP = '__world__';
   private __profileData: HypothesisProfile;
-  // private __profileDataBehavior: BehaviorSubject<any> = new BehaviorSubject(null);
+  // dialog vars for login in hypothesis
+  private _userDialog: DynamicDialogRef = null;
+  private _userDialogSub: Subject<any> = null;
 
   constructor(private httpClient: HttpClient, public dialogService: DialogService, private app: AppService) {
     this.reload();
@@ -251,23 +252,34 @@ export class HypothesisService {
    * @param closable determina si se puede cerrar el dialogo
    */
   requestUpdateOfUser<T>(back: () => Promise<T>, closable: boolean = false): Promise<T> {
-    return new Promise<T>((resolve) => {
-      const dialogRef = this.dialogService.open(HypothesisUserSigninDialogComponent, {
+    if (!this._userDialog) {
+      this._userDialogSub = new Subject();
+      this._userDialog = this.dialogService.open(HypothesisUserSigninDialogComponent, {
         modal: true,
         closable: closable,
         closeOnEscape: closable,
         data: {
           showRemoveSession: true,
           backdoor: (destroy) => {
-            dialogRef.close();
+            this._userDialogSub.next();
+            this._userDialog.close();
             if (destroy) {
-              dialogRef.destroy();
+              this._userDialog.destroy();
             }
-            resolve(back());
           }
         }
       });
+      this._userDialog.onDestroy.subscribe(() => {
+        this._userDialogSub = null
+        this._userDialog = null;
+      });
+    }
+    return new Promise<T>((resolve) => {
+      this._userDialogSub.subscribe(() => {
+        resolve(back());
+      })
     });
+
   }
 
   /**
@@ -280,6 +292,7 @@ export class HypothesisService {
   checkHypothesisUser<T>(back: () => Promise<T>): Promise<T> {
     return new Promise<T>((resolve) => {
       if (!this.haveUser) {
+        console.error('no have user')
         resolve(this.requestUpdateOfUser(back, false));
       } else {
         return resolve(back());
