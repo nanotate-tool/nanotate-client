@@ -28,19 +28,17 @@ export class HypothesisService {
 
   public static PUBLIC_GROUP = '__world__';
   private __profileData: HypothesisProfile;
-  private __profileDataBehavior: BehaviorSubject<any> = new BehaviorSubject(null);
+  // private __profileDataBehavior: BehaviorSubject<any> = new BehaviorSubject(null);
 
   constructor(private httpClient: HttpClient, public dialogService: DialogService, private app: AppService) {
     this.reload();
   }
 
   /**
-   * subscripcion de cuando se realiza algun cambio en la data del
-   * perfil del usuario de hypothesis
-   * @param sub controlador
+   * shortcut for app service subscription for event 'app-ch-hypothesis-account'
    */
-  onProfileChange(sub: (profile: any) => void): Subscription {
-    return this.__profileDataBehavior.subscribe(sub);
+  subscribe(sub: (profile: any) => void): Subscription {
+    return this.app.subscribe('app-ch-hypothesis-account', sub);
   }
 
   /**
@@ -98,7 +96,6 @@ export class HypothesisService {
 
   reload(withError: boolean = false, checkUser: boolean = false) {
     this.__profileData = null;
-    this.__profileDataBehavior.next(this.__profileData);
     return Promise.all([
       new Promise(resolve => {
         if (this.haveUser || checkUser) {
@@ -122,7 +119,7 @@ export class HypothesisService {
     return this.hypothesisGetProfile(token).then(response => {
       this.hypothesis_user = { token: token, username: user }
       this.__profileData = response;
-      this.__profileDataBehavior.next(this.__profileData);
+      this.app.exec('app-ch-hypothesis-account', this.__profileData);
       return true;
     });
   }
@@ -133,8 +130,8 @@ export class HypothesisService {
   logout() {
     this.hypothesis_user = null;
     this.__profileData = null;
-    this.__profileDataBehavior.next(null);
-    this.app.init({ url: null });
+    this.app.exec('app-ch-hypothesis-account', null);
+    this.app.reload({ url: null });
     this.app.redirect('/');
   }
 
@@ -238,7 +235,7 @@ export class HypothesisService {
         return this.hypothesisGetProfile(this.hypothesis_user.token)
           .then(response => {
             this.__profileData = <HypothesisProfile>response;
-            this.__profileDataBehavior.next(this.__profileData);
+            this.app.exec('app-ch-hypothesis-account', this.__profileData);
             return this.__profileData;
           }).catch(err => {
             return this.requestUpdateOfUser(async () => null);

@@ -44,7 +44,9 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
     // routing events
     this.addSubscription(this.activeRoute.queryParams.subscribe((params) => this.handleQueryParams(params)));
     // app reload
-    this.addSubscription(this.app.subscribe('reload', () => this.refreshAnnotations()));
+    this.addSubscription(
+      this.app.subscribe('app-ch-site-metadata', () => this.refreshAnnotations())
+    );
   }
 
   get query(): any {
@@ -101,7 +103,6 @@ export class RegisterPageComponent extends BaseSubscriptionComponent implements 
           annotation.tags = settings.ontologies.map(ontology => NANOPUBS.encodeOntologyTag(ontology)).concat(annotation.tags || []);
           this.handleAnnotation({ action: 'new', annotation: annotation });
           this.router.navigate(['.'], { relativeTo: this.activeRoute });
-          console.log(annotation)
         });
       });
     } else if (!this.annotation) {

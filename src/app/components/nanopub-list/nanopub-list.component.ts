@@ -26,24 +26,26 @@ export class NanopubListComponent extends BaseSubscriptionComponent implements O
   }
 
   ngOnInit(): void {
-    if (this.app.fullLoaded) {
+    if (this.app.siteData.metadata) {
       this.reload();
     } else {
       this.procesing = true;
     }
-    this.addSubscription(this.app.subscribe('init-reload', () => {
-      this.procesing = true;
-      this.procesingMessage = "Turn site url..."
-      this.el.markForCheck();
-    }));
     this.addSubscription(
-      this.app.subscribe('reload', (data) => {
-        this.reload()
+      this.app.subscribe('app-refresh', () => {
+        this.procesing = true;
+        this.procesingMessage = "Turn site url...";
+        this.el.markForCheck();
       })
     );
     this.addSubscription(
-      this.hypothesis.onProfileChange(() => this.reload())
-    )
+      this.app.subscribe(['app-ch-site-metadata', 'app-ch-hypothesis-account'], () => {
+        if (this.app.siteData.metadata) {
+          this.reload();
+        }
+        this.el.markForCheck();
+      })
+    );
   }
 
   get emptyNanopubs(): boolean {

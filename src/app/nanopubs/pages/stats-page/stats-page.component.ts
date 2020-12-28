@@ -15,19 +15,18 @@ export class StatsPageComponent extends BaseSubscriptionComponent implements OnI
   constructor(private app: AppService, private statsService: StatsService) { super(); }
 
   ngOnInit(): void {
-    this.addSubscription(
-      this.app.subscribeSiteData((data) => {
-        this.procesingSitedata = data && true;
-      })
-    )
-    this.addSubscription(
-      this.app.subscribe('reload', () => {
-        this.fetchStats();
-      })
-    );
-    if (this.app.fullLoaded) {
+    if (this.app.siteData.metadata) {
       this.fetchStats();
     }
+    
+    this.addSubscription(
+      this.app.subscribe('app-ch-site-metadata', () => {
+        this.procesingSitedata = this.app.siteData && true;
+        if (this.app.siteData.metadata) {
+          this.fetchStats();
+        }
+      })
+    )
   }
 
   /**

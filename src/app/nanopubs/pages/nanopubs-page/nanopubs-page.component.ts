@@ -19,7 +19,9 @@ export class NanopubsPageComponent extends BaseSubscriptionComponent implements 
   @ViewChild(WorkflowListComponent) workflowsComponent: WorkflowListComponent;
 
   nanopubs: Nanopublication[];
-  procesingSitedata: boolean = true;
+  get procesingSitedata() {
+    return this.app.siteData && true;
+  };
   perspective: 'nanopubs' | 'workflows' = 'nanopubs';
   procesingNanopubs: boolean = false;
 
@@ -30,8 +32,9 @@ export class NanopubsPageComponent extends BaseSubscriptionComponent implements 
 
   ngOnInit(): void {
     this.addSubscription(
-      this.app.subscribeSiteData((data) => {
-        this.procesingSitedata = data && true;
+      this.app.subscribe('app-ch-site-metadata', () => {
+        // this.procesingSitedata = this.app.siteData && true;
+        // delete
       })
     );
   }

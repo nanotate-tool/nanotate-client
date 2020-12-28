@@ -5,14 +5,19 @@ import { filter, map } from 'rxjs/operators'
 import { environment } from 'src/environments/environment';
 import { SiteMetaData } from '../models';
 import { ProtocolsService } from './protocols.service';
+
 /**
- * servicio central de control de la aplicacion
+ * events of service
+ */
+export type AppEvents = 'app-init' | 'app-refresh' | 'app-ch-site' | 'app-ch-site-metadata' | 'app-ch-hypothesis-account';
+/**
+ * central service for main control
  */
 @Injectable()
 export class AppService {
   public static SITE_URL = 'a2np_siteUrl';
   /**
-   * titulo del sitio
+   * site url (protocol)
    */
   private get __siteUrl(): string { return localStorage.getItem(AppService.SITE_URL) };
   private set __siteUrl(value: string) {
@@ -22,64 +27,71 @@ export class AppService {
       localStorage.removeItem(AppService.SITE_URL);
   };
   /**
-   * metadata del sitio
+   * site metadata
    */
   private __siteMetada: SiteMetaData;
 
   private __redirect: string;
 
-  private __fullLoaded: boolean = false;
-
-  private __observable: Subject<{ e: 'reload' | 'init-reload', args?: any }> = new Subject();
-  private __metadata_behavior: BehaviorSubject<SiteMetaData> = new BehaviorSubject(null);
+  private __observable: Subject<{ [key: string]: any }> = new Subject();
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router,
     private protocolsService: ProtocolsService) {
+    this.exec('app-init', this);
     // initial init
-    this.init({ url: this.__siteUrl });
+    this.reload({ url: this.__siteUrl });
     // listen routing events
     this.activatedRoute.queryParams.subscribe(params => {
       this.checkQueryParams(this.activatedRoute.snapshot, true);
     });
   }
 
-  init(args: { url: string }) {
-    this.__fullLoaded = false;
+  reload(args: { url: string }) {
     this.__siteMetada = null;
     this.__siteUrl = args.url;
-    this.__metadata_behavior.next(this.__siteMetada);
-    this.__observable.next({ e: 'init-reload', args: this });
+    this.exec('app-refresh', this);
+    this.exec('app-ch-site', this);
     Promise.all(
       [this.fetchSiteMetadata()]
     ).then((data) => {
-      // TODO
-    }).finally(() => {
-      this.__fullLoaded = true;
-      this.__observable.next({ e: 'reload', args: args });
-    })
+      this.exec('app-ch-site-metadata', this.__siteMetada);
+    }).catch(err => {
+      if (!['Bad URL <null>', 'Bad URL <>'].includes(err)) {
+        console.error(err);
+      }
+    });
   }
 
   /**
-   * realiza la subscripcion a un evento para este servicio
-   * @param e evento al cual se subscribe
-   * @param sub controlador
+   * makes subscription for passed event
+   * @param e event name or list of events names
+   * @param sub handler
    */
-  subscribe(e: 'reload' | 'init-reload', sub: (args: any) => void): Subscription {
-    return this.__observable.pipe(filter(event => event.e == e), map(event => event.args)).subscribe(sub);
+  subscribe(e: AppEvents | AppEvents[], sub: (args: any) => void): Subscription {
+    let events: AppEvents[] = e instanceof Array ? e : [e];
+    return this.__observable.pipe(
+      filter(bevent => {
+        const bkeys = Object.keys(bevent);
+        return events.find(e => bkeys.includes(e)) && true;
+      }),
+      map(data => {
+        return events.reduce((acc, e) => { return acc.concat(data[e]); }, []);
+      })
+    ).subscribe(sub);
   }
 
   /**
-   * subscripcion a cualquier cambio que se pueda presentar en la metadata del sitio
-   * @param sub controlador
+   * exec a app event for event name passed
+   * @param e event name
+   * @param args args of event
    */
-  subscribeSiteData(sub: (data: SiteMetaData) => void): Subscription {
-    return this.__metadata_behavior.subscribe(sub);
+  exec(e: AppEvents, args: any) {
+    return this.__observable.next({ [e]: args });
   }
 
   /**
-   * realiza el proceso de redirecion siempre y cuando el queryparam 'redirect'
-   * se encuentre presente en la direccion actual de lo contrario se enviara a
-   * la landing page de la app
+   * makes the process of redirection as long as the query param 'redirect'
+   * has present in the current site url otherwise, is sent to the home page
    */
   continueAndRedirect(alternative: string = null) {
     this.redirect(this.__redirect || alternative || '/');
@@ -87,9 +99,8 @@ export class AppService {
   }
 
   /**
-   * realiza el proceso de redireccion hacia una
-   * pagina de la aplicacion
-   * @param redirect pagina a redireccionar
+   * makes the process of redirect to any page in application
+   * @param redirect page url
    */
   redirect(redirect: any) {
     this.router.navigateByUrl(redirect);
@@ -99,7 +110,7 @@ export class AppService {
     const params = route.queryParams;
     this.__redirect = params['redirect'];
     if (params['url'] && this.__siteUrl != params['url']) {
-      this.init({ url: params['url'] });
+      this.reload({ url: params['url'] });
       if (redirect) {
         const pathSegments = route['_urlSegment'].segments.map(sgmt => sgmt.path);
         const queryParams = { ...params, url: undefined };
@@ -109,42 +120,29 @@ export class AppService {
   }
 
   /**
-   * determina si el servicio esta inicializado
-   * por lo minimo tiene la url del sitio a trabajar en la 
-   * aplicacion
+   * determines if the service has been init with minimum for correct work
    */
   get hasInit(): boolean {
     return this.__siteUrl && true;
   }
 
   /**
-   * retorna los datos base del sitio que se esta controlando actualmente
+   * returns the base data of current site
    */
   get siteData(): { url: string, metadata: SiteMetaData } {
     return { url: this.__siteUrl, metadata: this.__siteMetada };
   }
 
   /**
-   * determina si todos los procesos de carga inicial o posterior a
-   * un cambio de sitio se han completado
-   * (no asegura carga sin errores)
-   */
-  get fullLoaded(): boolean {
-    return this.__fullLoaded;
-  }
-
-  /**
-   * retorna los valores configurados para
-   * las variables pasadas
-   * @param field campo a consultar
+   * returns the value of passed vars in app environment
+   * @param field var name
    */
   env(field: 'host' | 'an2p-api-host' | 'production') {
     return environment[field];
   }
 
   /**
-   * obtiene la metadata del sitio que se esta trabajando actualmente
-   * en la aplicacion
+   * retrieve the current site metadata
    */
   private fetchSiteMetadata(): Promise<SiteMetaData> {
     if (this.__siteUrl) {
@@ -153,9 +151,6 @@ export class AppService {
           if (response && response.site_data) {
             this.__siteUrl = response.site_data.uri;
             this.__siteMetada = response.site_data;
-            this.__metadata_behavior.next(this.__siteMetada)
-          } else {
-            this.__metadata_behavior.next(null)
           }
           return this.__siteMetada;
         });

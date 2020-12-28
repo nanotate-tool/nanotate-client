@@ -21,10 +21,9 @@ export class NavBarComponent extends BaseSubscriptionComponent implements OnInit
   ngOnInit(): void {
     this.reload();
     this.addSubscription(
-      this.app.subscribe("reload", () => this.reload())
-    );
-    this.addSubscription(
-      this.hypothesis.onProfileChange(() => this.reload())
+      this.app.subscribe(['app-ch-site-metadata', 'app-ch-site-metadata'], () => {
+        this.reload();
+      })
     );
   }
 
@@ -42,7 +41,7 @@ export class NavBarComponent extends BaseSubscriptionComponent implements OnInit
       }
     ];
     //logout menu item
-    if (this.hypothesis && this.hypothesis.haveUser) {
+    if (this.hypothesis && this.hypothesis.profileData) {
       menu.push(
         {
           icon: 'pi pi-sign-out',

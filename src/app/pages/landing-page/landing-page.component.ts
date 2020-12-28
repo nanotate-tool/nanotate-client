@@ -17,7 +17,7 @@ export class LandingPageComponent extends BaseSubscriptionComponent implements O
       this.next();
       return;
     }
-    const onsetUrl = this.app.subscribe('reload', () => this.next());
+    const onsetUrl = this.app.subscribe('app-ch-site', () => this.next());
     this.addSubscription(onsetUrl);
   }
 

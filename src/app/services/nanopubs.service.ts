@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Annotation, BioAnnotation, Nanopublication } from '../models';
 import { NanoPubApiConfig } from '../models/settings';
@@ -18,7 +18,7 @@ export class NanopubsService {
    */
   private static default_rdf_format: string = 'json-html';
   private _settings: NanoPubApiConfig;
-  private _settigs_puller: Observable<any>;
+  private _settigs_puller: Subject<any>;
 
   constructor(private httpClient: HttpClient) {
   }
@@ -30,12 +30,17 @@ export class NanopubsService {
     if (this._settings) {
       return Promise.resolve(this._settings);
     } else {
-      if (!this._settigs_puller)
-        this._settigs_puller = this.httpClient.get(this.apiUrl('settings', false));
-
+      if (!this._settigs_puller) {
+        this._settigs_puller = new Subject();
+        this.httpClient.get(this.apiUrl('settings', false)).toPromise().then((response) => {
+          this._settings = <NanoPubApiConfig>response;
+          this._settigs_puller.next(response);
+        }).finally(()=>{
+          this._settigs_puller = null;
+        });
+      }
       return new Promise((resolve, reject) => {
         this._settigs_puller.subscribe((response) => {
-          this._settings = response;
           resolve(response);
         }, reject);
       });

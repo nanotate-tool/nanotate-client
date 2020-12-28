@@ -36,13 +36,13 @@ export class SiteUrlEditorComponent implements OnInit {
 
   next() {
     if (this.form.valid) {
-      this.app.init({ url: this.form.getRawValue().site });
+      this.app.reload({ url: this.form.getRawValue().site });
       this.onNext.emit(this.app.siteData);
     }
   }
 
   delete() {
-    this.app.init({ url: null });
+    this.app.reload({ url: null });
     this.router.navigate(['/']);
   }
 

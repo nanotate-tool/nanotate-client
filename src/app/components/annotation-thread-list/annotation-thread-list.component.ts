@@ -37,10 +37,12 @@ export class AnnotationThreadListComponent extends BaseSubscriptionComponent imp
     private el: ChangeDetectorRef) { super(); }
 
   ngOnInit(): void {
+    if (this.hypothesisService.profileData) {
+      this.search();
+    }
     this.addSubscription(
-      this.hypothesisService.onProfileChange((profile) => {
-        this.procesing = !profile && true;
-        if (profile) {
+      this.hypothesisService.subscribe((profile) => {
+        if (this.hypothesisService.profileData) {
           this.search();
         }
       })

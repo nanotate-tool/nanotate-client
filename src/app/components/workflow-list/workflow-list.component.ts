@@ -18,19 +18,21 @@ export class WorkflowListComponent extends BaseSubscriptionComponent implements 
   constructor(private app: AppService, private workflowsService: WorkflowsService, private el: ChangeDetectorRef) { super(); }
 
   ngOnInit(): void {
-    if (this.app.fullLoaded) {
+    if (this.app.siteData) {
       this.reload();
     } else {
       this.procesing = true;
     }
-    this.addSubscription(this.app.subscribe('init-reload', () => {
-      this.procesing = true;
-      this.procesingMessage = "Turn site url...";
-      this.el.markForCheck();
-    }));
     this.addSubscription(
-      this.app.subscribe('reload', (data) => {
-        this.reload()
+      this.app.subscribe('app-refresh', () => {
+        this.procesing = true;
+        this.procesingMessage = "Turn site url...";
+        this.el.markForCheck();
+      })
+    );
+    this.addSubscription(
+      this.app.subscribe('app-ch-site-metadata', () => {
+        this.reload();
       })
     );
   }

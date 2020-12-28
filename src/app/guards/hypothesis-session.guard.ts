@@ -17,10 +17,11 @@ export class HypothesisSessionGuard implements CanActivate {
       if (this.hypothesis.profileData) {
         return true;
       } else {
-        return this.hypothesis.userProfile()
-          .then(() => {
-            return true;
+        return new Promise((resolve,reject)=> {
+          this.hypothesis.subscribe(()=>{
+            resolve(this.hypothesis.profileData != null);
           })
+        });
       }
 
     } else {

@@ -21,7 +21,7 @@ export class NanopubsComponent extends BaseSubscriptionComponent implements OnIn
   ngOnInit(): void {
     this.loadTabs();
     this.addSubscription(
-      this.hypothesisService.onProfileChange(profile => {
+      this.hypothesisService.subscribe(profile => {
         //this.loaded = profile && true;
       })
     );

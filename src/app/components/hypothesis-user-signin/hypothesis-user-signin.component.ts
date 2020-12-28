@@ -34,7 +34,7 @@ export class HypothesisUserSigninComponent implements OnInit, AfterViewInit {
    * defines if has begun any session
    */
   get hasSession() {
-    return this.hypothesis.haveUser;
+    return this.hypothesis.profileData;
   }
 
   get form(): FormGroup {
