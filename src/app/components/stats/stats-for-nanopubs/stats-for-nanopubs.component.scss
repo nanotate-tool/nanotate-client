@@ -1,0 +1,23 @@
+::ng-deep .nanopubs-stats-table {
+    font-size: 12px;
+    thead,
+    tbody {
+        & > tr > td,
+        & > tr > th {
+            padding: 0.5em !important;
+        }
+    }
+
+    .c-txt {
+        width: 40%;
+    }
+    .c-tag {
+        width: 80px;
+    }
+    .c-pos {
+        width: 90px;
+    }
+    .c-ont{
+        width: 250px;
+    }
+}

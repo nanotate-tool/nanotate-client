@@ -32,3 +32,4 @@ export * from './workflow-editor/workflow-editor.component';
 export * from './workflow-editor/workflow-editor.module';
 export * from './workflow-list/workflow-list.module';
 export * from './workflow-list/workflow-list.component';
+export * from './stats';

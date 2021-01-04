@@ -35,7 +35,7 @@ export class NanopubsComponent extends BaseSubscriptionComponent implements OnIn
     this.tabs = [
       { label: 'Nanopublications', icon: 'pi pi-list', routerLink: ['.'] },
       { label: 'Annotations', icon: 'pi i-hypothesis-logo', routerLink: 'register' },
-      { label: 'Stats', icon: 'pi pi-chart-line', routerLink: 'stats' }
+      { label: 'Data Browser', icon: 'pi pi-chart-line', routerLink: 'stats' }
     ];
     this.activeTab = this.tabs[0];
   }

@@ -1,0 +1,20 @@
+<form [formGroup]="form" #ngForm="ngForm" (ngSubmit)="filter()" class="p-fluid p-formgrid">
+    <div class="p-field">
+        <label>Protocol</label>
+        <input pInputText type="text" formControlName="protocol">
+    </div>
+    <div class="p-field">
+        <label>Tag</label>
+        <p-multiSelect [filter]="false" [maxSelectedLabels]="8" selectedItemsLabel="{0} Tags Selected"
+            [showHeader]="false" defaultLabel="Select Tag" [options]="tagsItems" formControlName="tags">
+        </p-multiSelect>
+    </div>
+    <div class="p-field">
+        <label>User(s)</label><br>
+        <small>press tab for add new user</small>
+        <p-chips formControlName="users" [addOnTab]="true" [addOnBlur]="true"></p-chips>
+    </div>
+    <div>
+        <button pButton type="submit" label="Filter"></button>
+    </div>
+</form>

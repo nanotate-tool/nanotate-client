@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { EssentialStats, SiteMetaData } from 'src/app/models';
+import { MenuItem } from 'primeng/api';
+import { EssentialStats, SiteMetaData, StatsFilterForm } from 'src/app/models';
 import { AppService, StatsService } from 'src/app/services';
 import { BaseSubscriptionComponent } from 'src/app/utils';
 
@@ -9,24 +10,23 @@ import { BaseSubscriptionComponent } from 'src/app/utils';
 })
 export class StatsPageComponent extends BaseSubscriptionComponent implements OnInit {
 
-  stats: EssentialStats;
-  procesingSitedata: boolean = true;
+  filterForm: StatsFilterForm;
+  perspective: 'tags' | 'users' | 'nanopubs' = 'tags';
+  menuModel: MenuItem[] = [
+    {
+      label: 'Tags', icon: '', command:() => { this.perspective = 'tags'}
+    },
+    {
+      label: 'Users', icon: '', command:() => { this.perspective = 'users'}
+    },
+    {
+      label: 'Nano publications', icon: '', command:() => { this.perspective = 'nanopubs'}
+    }
+  ]
 
   constructor(private app: AppService, private statsService: StatsService) { super(); }
 
   ngOnInit(): void {
-    if (this.app.siteData.metadata) {
-      this.fetchStats();
-    }
-    
-    this.addSubscription(
-      this.app.subscribe('app-ch-site-metadata', () => {
-        this.procesingSitedata = this.app.siteData && true;
-        if (this.app.siteData.metadata) {
-          this.fetchStats();
-        }
-      })
-    )
   }
 
   /**
@@ -36,11 +36,4 @@ export class StatsPageComponent extends BaseSubscriptionComponent implements OnI
     return this.app.siteData.metadata;
   }
 
-  fetchStats() {
-    return this.statsService.getEssential(this.app.siteData.url)
-      .then(stats => {
-        this.stats = stats ? stats[0] : null;
-        return stats
-      })
-  }
 }

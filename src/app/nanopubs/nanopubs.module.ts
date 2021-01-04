@@ -4,7 +4,8 @@ import { NanopubsRoutingModule } from './nanopubs-routing.module';
 import { RegisterPageComponent, NanopubsPageComponent } from './pages';
 import {
   AnnotationRegistrationModule, AnnotationThreadListModule, LoadingPanelModule, NanopubCardModule,
-  NanopubListModule, NanopubPublisherModule, NanopubRdfBodyModule, SiteMetadataCardModule, SiteUrlEditorModule, WorkflowListModule
+  NanopubListModule, NanopubPublisherModule, NanopubRdfBodyModule, SiteMetadataCardModule, SiteUrlEditorModule,
+  StatsFilterFormModule, StatsForGenericModule, StatsForNanopubsModule, WorkflowListModule
 } from '../components';
 import { NanopubsComponent } from './nanopubs.component';
 import { PageLayoutModule } from '../layout';
@@ -28,7 +29,10 @@ import { ButtonModule } from 'primeng/button';
     NanopubListModule,
     WorkflowListModule,
     ButtonModule,
-    LoadingPanelModule
+    LoadingPanelModule,
+    StatsForGenericModule,
+    StatsFilterFormModule,
+    StatsForNanopubsModule
   ],
   declarations: [RegisterPageComponent, NanopubsComponent, NanopubsPageComponent, StatsPageComponent]
 })

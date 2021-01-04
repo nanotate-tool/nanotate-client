@@ -1,0 +1,35 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <ng-container *ngIf="loaded; else _loading_panel">
+            <ng-container *ngIf="isTagsEmpty; then  _empty else _tags "></ng-container>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #_empty>
+    <div class="p-text-center">
+        <h1>Not Data found</h1>
+    </div>
+</ng-template>
+
+<ng-template #_tags>
+    <p-chart *ngIf="showChart" type="pie" [data]="chartModel" [options]="options"></p-chart>
+    <p-table *ngIf="showTable" [value]="genericStats">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>{{typeSettings.table.label}}</th>
+                <th>{{typeSettings.table.count}}</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-tag>
+            <tr>
+                <td>{{tag.label}}</td>
+                <td>{{tag.count}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</ng-template>
+
+<ng-template #_loading_panel>
+    <a2np-c-loading-panel message="Loading..."></a2np-c-loading-panel>
+</ng-template>

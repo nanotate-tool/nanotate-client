@@ -1,0 +1,41 @@
+<p-table #dt [columns]="cols" [value]="data.data" [paginator]="true" [lazy]="true" [rows]="data.page.size"
+    [totalRecords]="data.page.totalRecords" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" (onPage)="page($event)"
+    tableStyleClass="nanopubs-stats-table">
+    <ng-template pTemplate="caption">
+        <div class="p-d-flex">
+            <h1 style="flex: 1;">Nanopublications</h1>
+            <div class="p-d-flex  p-ai-center">
+                <span class="p-px-2">Export Data</span>
+                <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="CSV" (click)="dt.exportCSV()"
+                    style="margin-right: 0.5em;" [disabled]="isEmpty"></button>
+                <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label="EXCEL"
+                    (click)="exportExcel()" style="margin-right: 0.5em;" class="ui-button-success"
+                    [disabled]="isEmpty"></button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [class]="col.class">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-nanopub>
+        <tr>
+            <td>{{nanopub.text}}</td>
+            <td [innerHTML]="clearAsHtml(nanopub.tag)">{{nanopub.tag}}</td>
+            <td>{{nanopub.text_position}}</td>
+            <td [innerHTML]="clearAsHtml(nanopub.ontologies)">{{nanopub.ontologies}}</td>
+            <td [innerHTML]="clearAsHtml(nanopub.ontologies_term)">{{nanopub.ontologies_term}}</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr style="color: red;">
+            <td [attr.colspan]="5">
+                No Nanopublications found - Empty
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
