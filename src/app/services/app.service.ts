@@ -35,6 +35,8 @@ export class AppService {
 
   private __observable: Subject<{ [key: string]: any }> = new Subject();
 
+  private __fetchToken: number = 0;
+
   constructor(private activatedRoute: ActivatedRoute, private router: Router,
     private protocolsService: ProtocolsService) {
     this.exec('app-init', this);
@@ -47,14 +49,18 @@ export class AppService {
   }
 
   reload(args: { url: string }) {
+    const localFetchtoken = new Date().getTime() + Math.floor(Math.random() * 100);
+    this.__fetchToken = localFetchtoken;
     this.__siteMetada = null;
     this.__siteUrl = args.url;
     this.exec('app-refresh', this);
     this.exec('app-ch-site', this);
     return Promise.all(
-      [this.fetchSiteMetadata()]
+      [this.fetchSiteMetadata(localFetchtoken)]
     ).then((data) => {
-      this.exec('app-ch-site-metadata', this.__siteMetada);
+      if (this.__fetchToken == localFetchtoken) {
+        this.exec('app-ch-site-metadata', this.__siteMetada);
+      }
     }).catch(err => {
       if (!['Bad URL <null>', 'Bad URL <>'].includes(err)) {
         console.error(err);
@@ -139,11 +145,11 @@ export class AppService {
   /**
    * retrieve the current site metadata
    */
-  private fetchSiteMetadata(): Promise<SiteMetaData> {
+  private fetchSiteMetadata(fetchToken: number = undefined): Promise<SiteMetaData> {
     if (this.__siteUrl) {
       return this.protocolsService.getProtocol(this.__siteUrl)
         .then(response => {
-          if (response && response.site_data) {
+          if ((fetchToken == undefined || this.__fetchToken == fetchToken) && response && response.site_data) {
             this.__siteUrl = response.site_data.uri;
             this.__siteMetada = response.site_data;
           }
