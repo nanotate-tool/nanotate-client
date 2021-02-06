@@ -88,6 +88,13 @@ export class AnnotationPropsComponent {
     }
 
     /**
+     * returns simple metadata about of annotations in this instance
+     */
+    get annotationMetaData() {
+        return NANOPUBS.getAnnotationMetadata(this.annotation);
+    }
+
+    /**
      * cambia el valor de la variable en el settings de la anotacion
      * @param key variable en la configuracion
      * @param value valor a aplicar

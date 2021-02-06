@@ -2,10 +2,11 @@
     <header class="_annotation_header">
         <div class="_annotation_header_row p-d-flex p-jc-between">
             <h3 class="__title p-mr-2">{{author}}</h3>
-            <span class="__gtag p-text-bold clickable" (click)="onGtagClick.next(annotation)">{{gtag}}</span>
+            <span *ngIf="gtag" class="__gtag p-text-bold clickable"
+                (click)="onGtagClick.next(annotation)">{{gtag}}</span>
         </div>
         <div class="_annotation_header_row p-text-bold">
-            <i [ngClass]="groupIcon" class="p-pr-1" ></i>
+            <i [ngClass]="groupIcon" class="p-pr-1"></i>
             <span>{{group}}</span>
         </div>
     </header>
@@ -13,6 +14,9 @@
         <blockquote class="__exact">
             {{exact}}
         </blockquote>
+        <small class="p-text-italic p-text-bold __light_text">
+            TextPosition: {{annotationMetaData.start + "-" + annotationMetaData.end}}
+        </small>
     </div>
     <div class="annotation-body p-grid">
         <div class="p-col-12 __text">
