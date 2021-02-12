@@ -2,6 +2,7 @@
     <header class="_annotation_header">
         <div class="_annotation_header_row p-d-flex p-jc-between">
             <h3 class="__title p-mr-2">{{author}}</h3>
+            <span class="__date" >{{annotation.created|date:'mediumDate'}}</span>
             <span *ngIf="gtag" class="__gtag p-text-bold clickable"
                 (click)="onGtagClick.next(annotation)">{{gtag}}</span>
         </div>
