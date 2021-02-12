@@ -1,13 +1,15 @@
 <ng-container *ngIf="!procesing else loading_panel">
-    <div class="p-d-flex p-ai-center">
-        <h2 style="flex: 1;">Workflows In Site</h2>
-        <div class="__buttons_bar">
-            <button pButton [disabled]="procesing" icon="pi pi-refresh" class="p-button-text p-button-rounded"
-                (click)="reload()" label="Refresh"></button>
-            <ng-content select="[head-buttons]"></ng-content>
+    <div class="__workflows_header" [ngClass]="{'sticky-simple-panel-view bg-white': sticky}">
+        <div class="p-d-flex p-ai-center">
+            <h2 style="flex: 1;">Workflows In Site</h2>
+            <div class="__buttons_bar">
+                <button pButton [disabled]="procesing" icon="pi pi-refresh" class="p-button-text p-button-rounded"
+                    (click)="reload()" label="Refresh"></button>
+                <ng-content select="[head-buttons]"></ng-content>
+            </div>
         </div>
     </div>
-    <div class="__nanopubs_body">
+    <div class="__workflows_body p-pt-2">
         <ng-container *ngIf="emptyWorkflows else workflows_body">
             <div class="p-text-center">
                 <h1 style="color: red;" class="p-my-6">No workflows found!!</h1>

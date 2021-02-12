@@ -9,7 +9,7 @@
             </ng-container>
         </ng-container>
         <ng-template #nanopubs>
-            <a2np-c-nanopub-list>
+            <a2np-c-nanopub-list [sticky]="true">
                 <ng-container head-buttons>
                     <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-success"
                         (click)="newWorkflow()" label="New workflow" [disabled]="procesingNanopubs"></button>
@@ -19,7 +19,7 @@
             </a2np-c-nanopub-list>
         </ng-template>
         <ng-template #workflows>
-            <a2np-c-workflow-list [showNewWorkflow]="true" (onNewWorkflow)="newWorkflow()">
+            <a2np-c-workflow-list [showNewWorkflow]="true" (onNewWorkflow)="newWorkflow()" [sticky]="true">
                 <ng-container head-buttons>
                     <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-success"
                         (click)="newWorkflow()" label="New workflow" [disabled]="procesingNanopubs"></button>
@@ -30,9 +30,11 @@
         </ng-template>
     </div>
     <div class="p-col-4">
-        <ng-container *ngIf="procesingSitedata else loading_panel">
-            <a2np-c-site-metadata-card [metadata]="siteMetadata"></a2np-c-site-metadata-card>
-        </ng-container>
+        <div class="sticky-panel-full-view">
+            <ng-container *ngIf="procesingSitedata else loading_panel">
+                <a2np-c-site-metadata-card [metadata]="siteMetadata"></a2np-c-site-metadata-card>
+            </ng-container>
+        </div>
     </div>
 </div>
 

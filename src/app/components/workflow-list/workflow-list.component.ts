@@ -12,6 +12,7 @@ import { BaseSubscriptionComponent } from 'src/app/utils';
 export class WorkflowListComponent extends BaseSubscriptionComponent implements OnInit {
 
   @Input() showNewWorkflow: boolean = false;
+  @Input() sticky: boolean = false;
   @Output() onNewWorkflow: EventEmitter<any> = new EventEmitter();
 
   workflows: Workflow[] = [];

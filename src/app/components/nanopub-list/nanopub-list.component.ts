@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Nanopublication } from 'src/app/models';
 import { AppService, HypothesisService, NanopubsService } from 'src/app/services';
@@ -11,6 +11,8 @@ import { BaseSubscriptionComponent } from 'src/app/utils';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NanopubListComponent extends BaseSubscriptionComponent implements OnInit {
+
+  @Input() sticky: boolean = false;
 
   /**
    * lista de nanopublicaciones disponibles para el sitio actual

@@ -2,8 +2,10 @@
     <div class="p-col-12 stats_viewer_component">
         <div class="p-grid p-jc-center">
             <div class="p-col-3">
-                <h1>Data Browser</h1>
-                <a2np-c-stats-filter-form (onFilter)="filterForm = $event"></a2np-c-stats-filter-form>
+                <div class="sticky-panel-full-view">
+                    <h1>Data Browser</h1>
+                    <a2np-c-stats-filter-form (onFilter)="filterForm = $event"></a2np-c-stats-filter-form>
+                </div>
             </div>
             <div class="p-col-9">
                 <p-tabMenu [model]="menuModel"></p-tabMenu>
